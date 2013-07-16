@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- tactionbar -->
+    <style name="BaseTactionBar">
+        <item name="android:padding">0dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="BaseTactionBarTab">
+        <item name="android:button">@null</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+    </style>
+
+    <style name="home_TactionBar" parent="BaseTactionBar">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_tacionbar_red</item>
+    </style>
+
+    <style name="home_TactionBarTab" parent="BaseTactionBarTab">
+        <item name="textColorOn">@color/text_white</item>
+        <item name="textColorOff">@color/text_white</item>
+        <item name="android:textColor">@color/text_white</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:background">@drawable/selector_home_tab_bg</item>
+    </style>
+
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Mensa</string>
+    <!-- home TactionBar -->
+    <string name="news">新闻</string>
+    <string name="market">行情</string>
+    <string name="special_colunm">专栏</string>
+    <string name="question">提问</string>
+    <string name="settings">设置</string>
+    <!--  -->
+    <string name="quit_tip">"再按一次退出程序..."</string>
+
+</resources>
