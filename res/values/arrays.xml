@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="news_types">
+        <item>证券市场</item>
+        <item>上市公司</item>
+        <item>行业资讯</item>
+    </string-array>
+    <string-array name="quote_areas">
+        <item>亚洲市场</item>
+        <item>欧洲市场</item>
+        <item>美洲市场</item>
+        <item>澳洲市场</item>
+        <item>非洲市场</item>
+    </string-array>
+
+</resources>

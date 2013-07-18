@@ -13,12 +13,12 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 
 import com.mensa.R;
-import com.mensa.fragment.MarketPage;
-import com.mensa.fragment.NewsPage;
-import com.mensa.fragment.QuestionPage;
-import com.mensa.fragment.SettingsPage;
-import com.mensa.fragment.SpecialColumnPage;
-import com.mensa.widget.tactionbar.TationBar;
+import com.mensa.view.fragment.FragAbout;
+import com.mensa.view.fragment.FragQuote;
+import com.mensa.view.fragment.FragNews;
+import com.mensa.view.fragment.FragQuestion;
+import com.mensa.view.fragment.FragSpecialColumn;
+import com.mensa.view.widget.TationBar;
 
 public class MainActivity extends FragmentActivity {
 	protected static final String TAG = "MainActivity";
@@ -90,15 +90,15 @@ public class MainActivity extends FragmentActivity {
 		public Fragment getItem(int index) {
 			switch (index) {
 			case 0:
-				return new NewsPage();
+				return new FragNews();
 			case 1:
-				return new MarketPage();
+				return new FragQuote();
 			case 2:
-				return new SpecialColumnPage();
+				return new FragSpecialColumn();
 			case 3:
-				return new QuestionPage();
+				return new FragQuestion();
 			case 4:
-				return new SettingsPage();
+				return new FragAbout();
 			}
 			return null;
 		}

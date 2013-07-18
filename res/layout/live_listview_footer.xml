@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="@string/live_listview_click_more"
+        android:text="@string/live_listview_next_page"
         android:textSize="10sp" />
 
     <ProgressBar

@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Mensa</string>
+    <string name="app_name">Mensa投资</string>
     <!-- home TactionBar -->
     <string name="news">新闻</string>
-    <string name="market">行情</string>
+    <string name="details_title">今日要闻</string>
+    <string name="quote">行情</string>
     <string name="special_colunm">专栏</string>
     <string name="question">提问</string>
     <string name="settings">设置</string>
     <!--  -->
-    <string name="quit_tip">"再按一次退出程序..."</string>
+    <string name="quit_tip">再按一次退出程序</string>
+    <string name="content">content</string>
+    <!-- toast -->
+    <string name="get_news_error">获取新闻失败，请稍后再试</string>
+    <string name="get_news_details_error">获取新闻详情失败</string>
+    <string name="get_quotes_error">获取行情信息失败</string>
+    <string name="net_un_available">没有可用网络，请检查网络连接</string>
+    <!-- Quote -->
+    <string name="quote_title">名称</string>
+    <string name="quote_price">最新</string>
+    <string name="quote_change_amount">跌涨额</string>
+    <string name="quote_change_price">跌涨幅</string>
+
+    <!-- Chinese Market -->
+    <string name="chinese_m_1">上证指数</string>
+    <string name="chinese_m_2">深证成指</string>
+    <string name="chinese_m_3">沪深300</string>
+    <string name="chinese_m_4">中小板指</string>
+    <string name="chinese_m_5">创业板指</string>
 
 </resources>

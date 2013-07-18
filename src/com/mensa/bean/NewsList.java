@@ -3,14 +3,14 @@ package com.mensa.bean;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
-
-import android.content.Context;
-
-import com.mensa.net.CacheUtil;
+import org.json.JSONObject;
 
 public class NewsList extends BaseBean {
 	private static final long serialVersionUID = 1L;
+
+	private static final String TAG = "NewsList";
 
 	//
 	private int type;
@@ -19,15 +19,24 @@ public class NewsList extends BaseBean {
 
 	public NewsList() {
 		type = 21;
-		page = 0;
+		page = 1;
 		data = new ArrayList<News>();
 	}
 
-	public static NewsList fromJSON(String jsonStr) throws JSONException {
-		NewsList newsList = new NewsList();
-		// JSONObject jo = new JSONObject(jsonStr);
+	public void copy(NewsList temp) {
+		this.type = temp.type;
+		this.page = temp.page;
+		this.data.clear();
+		this.data.addAll(temp.data);
+	}
 
-		return newsList;
+	public void parseJSON(String jsonStr) throws JSONException {
+		JSONObject jo = new JSONObject(jsonStr);
+		JSONArray ja = jo.getJSONArray("data");
+		this.data.clear();
+		for (int i = 0; i < ja.length(); i++) {
+			this.data.add(News.parseJSON(ja.getJSONObject(i)));
+		}
 	}
 
 	/**
@@ -37,24 +46,8 @@ public class NewsList extends BaseBean {
 	 * @param page
 	 * @return
 	 */
-	private static String generateCacheKey(int type, int page) {
+	public String getCacheKey() {
 		return "mensa_news_" + type + "_" + page;
-	}
-
-	/**
-	 * 保存缓存
-	 * 
-	 * @param context
-	 * @param newsList
-	 */
-	public static void saveCache(Context context, NewsList newsList) {
-		String CACHE_KEY = generateCacheKey(newsList.getType(), newsList.getPage());
-		CacheUtil.saveCache(context, CACHE_KEY, newsList);
-	}
-
-	public static NewsList readCache(Context context, int type, int page) {
-		String CACHE_KEY = generateCacheKey(type, page);
-		return (NewsList) CacheUtil.readCache(context, CACHE_KEY);
 	}
 
 	public int getType() {
@@ -76,9 +69,4 @@ public class NewsList extends BaseBean {
 	public List<News> getData() {
 		return data;
 	}
-
-	public void setData(List<News> data) {
-		this.data = data;
-	}
-
 }

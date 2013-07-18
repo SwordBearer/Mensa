@@ -7,20 +7,16 @@
     <RelativeLayout style="@style/AppHead" >
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/news"
-            android:textColor="@color/text_white" />
+            style="@style/HeadTitle"
+            android:text="@string/news" />
 
-        <Button
+        <Spinner
             android:id="@+id/frag_news_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true" />
+            style="@style/HeadSpinner"
+            android:spinnerMode="dropdown" />
     </RelativeLayout>
 
-    <com.mensa.widget.LiveListView
+    <com.mensa.view.widget.LiveListView
         android:id="@+id/frag_news_lv"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

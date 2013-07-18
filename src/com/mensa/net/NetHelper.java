@@ -20,6 +20,8 @@ import android.util.Log;
 public class NetHelper {
 	public static final String APP_URL = "http://www.kancj.com";
 	public static final String URL_NEWS = APP_URL + "/handler/app/typenews.ashx";
+	public static final String URL_NEWS_DETAILS = APP_URL + "/handler/app/article.ashx";
+	public static final String URL_QUOTES = APP_URL + "/handler/app/quotes.ashx";
 
 	/**
 	 * 检测网络是否可用
@@ -32,6 +34,33 @@ public class NetHelper {
 		return ni != null && ni.isConnectedOrConnecting();
 	}
 
+	/******************************* API *************************************/
+
+	public static void getNews(int type, int page, OnRequestListener listener) {
+		String url = URL_NEWS + "?type2=" + type + "&page=" + page + "&rd=" + Math.random();
+		_get(url, listener);
+	}
+
+	public static void getNewsDetails(int id, OnRequestListener listener) {
+		_get(URL_NEWS_DETAILS + "?id=" + id + "&rd=" + Math.random(), listener);
+	}
+
+	public static void getQuotes(int areaId, OnRequestListener listener) {
+		_get(URL_QUOTES + "?area=" + areaId + "&rd=" + Math.random(), listener);
+	}
+
+	private static void _get(String url, OnRequestListener listener) {
+		try {
+			String response = httpGetStr(url);
+			Log.e("Net", "获取的数据是 " + response);
+			if (response == null) {
+				listener.onError("无法获取数据");
+			}
+			listener.onComplete(response);
+		} catch (Exception e) {
+		}
+	}
+
 	/***************************** HTTP GET **********************************/
 
 	/**
@@ -42,7 +71,7 @@ public class NetHelper {
 	 */
 	private static InputStream httpGet(String uri) {
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet();
+		HttpGet httpGet = new HttpGet(uri);
 		InputStream inputStream = null;
 		try {
 			HttpResponse response = httpClient.execute(httpGet);
@@ -55,6 +84,13 @@ public class NetHelper {
 			return null;
 		}
 		return inputStream;
+	}
+
+	public static String httpGetStr(String uri) throws IOException {
+		Log.e("GET", "GET URL:" + uri);
+		InputStream is = httpGet(uri);
+		Log.e("GET", "AFTER GET URL:" + is.available());
+		return InputStreamTOString(is);
 	}
 
 	/**
@@ -73,12 +109,6 @@ public class NetHelper {
 			outStream.write(data, 0, count);
 		data = null;
 		return new String(outStream.toByteArray());
-	}
-
-	public static String httpGetStr(String uri) throws IOException {
-		Log.e("GET", "GET URL:" + uri);
-		InputStream is = httpGet(uri);
-		return InputStreamTOString(is);
 	}
 
 	/**
