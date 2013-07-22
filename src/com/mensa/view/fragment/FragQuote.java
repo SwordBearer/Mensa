@@ -28,11 +28,15 @@ import com.mensa.net.OnRequestListener;
 import com.mensa.view.UIHelper;
 
 public class FragQuote extends BaseFragment {
-	private ProgressBar progressBar;
-	String TAG = "FragQuote";
-	private static final int UPDATE_STEP = 4000;
+	private static final int MSG_SHOW_PROGRESS = 0x21;
+	private static final int MSG_NO_NET = 0x22;
+	private static final int MSG_QUOTES_OK = 0x23;
+	private static final int MSG_QUOTES_ERROR = 0x24;
+
+	private static final int UPDATE_STEP = 40000;
 
 	private Spinner areaSpinner;
+	private ProgressBar progressBar;
 	private int[] areaIds = { 1, 2, 3, 4, 5 };
 	private int currentArea = areaIds[0];
 	private List<Quote> quotes = new ArrayList<Quote>();
@@ -40,8 +44,8 @@ public class FragQuote extends BaseFragment {
 	private ListView lvQuotes;
 	private QuotesAdapter mAdapter;
 
-	private int delay = 0;
-	private boolean isUpdate = false;
+	// 是否需要刷新，当跳转到其他页面时，就停止刷新
+	private boolean isUpdating = false;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,102 +74,100 @@ public class FragQuote extends BaseFragment {
 		});
 		mAdapter = new QuotesAdapter(mContext, quotes);
 		lvQuotes.setAdapter(mAdapter);
-		//
 		loadQuotes(0);
 	}
 
-	private Runnable loadQuotesRunnable = new Runnable() {
-		public void run() {
-			if (isUpdate)
-				try {
-					Thread.sleep(delay);
-					NetHelper.getQuotes(currentArea, loadQuotesListener);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-		}
-	};
-
 	private void loadQuotes(int delay) {
-		this.delay = delay;
-		progressBar.setVisibility(View.VISIBLE);
-		new Thread(loadQuotesRunnable).start();
+		LoadQuotesThread thread = new LoadQuotesThread();
+		thread.setDelay(delay);
+		thread.start();
 	}
 
 	private OnRequestListener loadQuotesListener = new OnRequestListener() {
 		@Override
 		public void onError(String msg) {
-			handler.sendEmptyMessage(MSG_ERROR);
+			handler.sendEmptyMessage(MSG_QUOTES_ERROR);
 		}
 
 		@Override
 		public void onComplete(Object object) {
-			String response = object.toString();
-			try {
-				JSONArray jArray = new JSONArray(response);
-				quotes.clear();
-				for (int i = 0; i < jArray.length(); i++) {
-					quotes.add(Quote.parseJSON(jArray.getJSONObject(i)));
-				}
-				handler.sendEmptyMessage(MSG_OK);
-			} catch (JSONException e) {
-				onError(null);
-			}
+			Message msg = handler.obtainMessage();
+			msg.what = MSG_QUOTES_OK;
+			msg.obj = object;
+			handler.sendMessage(msg);
 		}
 	};
 
 	private Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			/* 再过40秒就更新数据 */
-			loadQuotes(UPDATE_STEP);
 			switch (msg.what) {
-			case MSG_OK:
-				mAdapter.notifyDataSetChanged();
+			case MSG_QUOTES_OK:
+				String response = msg.obj.toString();
+				try {
+					JSONArray jArray = new JSONArray(response);
+					if (jArray.length() < 1)
+						return;
+					quotes.clear();
+					mAdapter.notifyDataSetChanged();
+					for (int i = 0; i < jArray.length(); i++) {
+						quotes.add(Quote.parseJSON(jArray.getJSONObject(i)));
+					}
+					mAdapter.notifyDataSetChanged();
+				} catch (JSONException e) {
+				}
 				progressBar.setVisibility(View.INVISIBLE);
+				loadQuotes(UPDATE_STEP);
 				break;
-			case MSG_ERROR:
-				UIHelper.showToast(mContext, R.string.get_quotes_error, 0);
+			case MSG_QUOTES_ERROR:
+				UIHelper.showToast(mContext, R.string.get_quotes_error);
+				break;
+			case MSG_NO_NET:
+				UIHelper.showToast(mContext, R.string.net_un_available);
+				break;
+			case MSG_SHOW_PROGRESS:
+				progressBar.setVisibility(View.VISIBLE);
 				break;
 			}
 		}
 	};
 
+	private class LoadQuotesThread extends Thread {
+		private int delay = 0;
+
+		public void setDelay(int delay2) {
+			this.delay = delay2;
+		}
+
+		@Override
+		public void run() {
+			// 如果不需要刷新
+			if (!isUpdating)
+				return;
+			try {
+				Thread.sleep(delay);
+				if (!NetHelper.isNetworkConnected(mContext)) {
+					return;
+				}
+				handler.sendEmptyMessage(MSG_SHOW_PROGRESS);
+				NetHelper.getQuotes(currentArea, loadQuotesListener);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	@Override
 	public void onPause() {
 		super.onPause();
-		isUpdate = false;
-		Log.e(TAG, "onPause");
+		isUpdating = false;
+		Log.e("FragQuote", "onPause=============isUpdate:" + isUpdating);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		Log.e(TAG, "onResume");
-		isUpdate = true;
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		Log.e(TAG, "onDestroy");
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		Log.e(TAG, "onDetach");
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		Log.e(TAG, "onStart");
-	}
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		Log.e(TAG, "onStop");
+		isUpdating = true;
+		Log.e("FragQuote", "onResume=============isUpdate:" + isUpdating);
 	}
 }

@@ -10,9 +10,9 @@ import android.widget.TextView;
 import com.mensa.R;
 import com.mensa.bean.News;
 
-public class NewsListAdapter extends BaseListAdapter {
+public class NewsAdapter extends BaseListAdapter {
 
-	public NewsListAdapter(Context context, List<News> data) {
+	public NewsAdapter(Context context, List<?> data) {
 		super(context, data);
 	}
 

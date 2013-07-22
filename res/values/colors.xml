@@ -9,5 +9,9 @@
     <color name="details_info">#828282</color>
     <color name="quote_green">#228B22</color>
     <color name="quote_red">#EE0000</color>
+    <!--  -->
+
+    <color name="question">#BFD9E9</color>
+    <color name="answer">#FF9900</color>
 
 </resources>

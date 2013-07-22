@@ -39,7 +39,7 @@
             style="@style/home_TactionBarTab"
             android:layout_weight="1"
             android:drawableTop="@drawable/test_tab"
-            android:text="@string/settings" />
+            android:text="@string/about" />
     </com.mensa.view.widget.TationBar>
 
     <android.support.v4.view.ViewPager

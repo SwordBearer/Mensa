@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.webkit.WebView;
 
 import com.mensa.R;
@@ -32,7 +33,7 @@ public class NewsDetailsActivity extends FragmentActivity {
 		Intent intent = getIntent();
 		mNews = (News) intent.getSerializableExtra("extra_news");
 		if (mNews == null) {
-			UIHelper.showToast(this, R.string.get_news_details_error, 0);
+			UIHelper.showToast(this, R.string.get_news_details_error);
 			finish();
 			return;
 		}
@@ -43,10 +44,14 @@ public class NewsDetailsActivity extends FragmentActivity {
 		News tempNews = (News) CacheUtil.readCache(this, mNews.getCacheKey());
 		if (tempNews != null) {
 			mNews = tempNews;
+			Log.e("TEST", "读取缓存文章内容 " + mNews.getCacheKey());
 			showNewsDetails();
 		} else {
 			new Thread(new Runnable() {
 				public void run() {
+					if (!NetHelper.isNetworkConnected(NewsDetailsActivity.this)) {
+						return;
+					}
 					NetHelper.getNewsDetails(mNews.getId(), loadNewsListener);
 				}
 			}).start();
@@ -75,6 +80,7 @@ public class NewsDetailsActivity extends FragmentActivity {
 			String response = (String) object;
 			try {
 				mNews.parseContent(new JSONObject(response));
+				Log.e("TEST", "缓存文章内容 " + mNews.getCacheKey());
 				CacheUtil.saveCache(NewsDetailsActivity.this, mNews.getCacheKey(), mNews);
 				handler.sendEmptyMessage(MSG_OK);
 			} catch (JSONException e) {
@@ -90,7 +96,7 @@ public class NewsDetailsActivity extends FragmentActivity {
 				showNewsDetails();
 				break;
 			case MSG_ERROR:
-				UIHelper.showToast(NewsDetailsActivity.this, R.string.get_news_details_error, 0);
+				UIHelper.showToast(NewsDetailsActivity.this, R.string.get_news_details_error);
 				break;
 			default:
 				super.handleMessage(msg);

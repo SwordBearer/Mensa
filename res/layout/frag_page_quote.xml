@@ -12,7 +12,7 @@
             android:layout_height="32dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/loading_light_01"
-            android:visibility="gone" />
+            android:visibility="invisible" />
 
         <TextView
             android:layout_width="wrap_content"

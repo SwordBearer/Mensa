@@ -17,7 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.mensa.R;
-import com.mensa.adapter.NewsListAdapter;
+import com.mensa.adapter.NewsAdapter;
 import com.mensa.bean.NewsList;
 import com.mensa.net.CacheUtil;
 import com.mensa.net.NetHelper;
@@ -29,11 +29,13 @@ import com.mensa.view.widget.LiveListView.OnMoreListener;
 import com.mensa.view.widget.LiveListView.OnRefreshListener;
 
 public class FragNews extends BaseFragment {
+	private static final int MSG_NEWS_OK = 0x11;
+	private static final int MSG_NEWS_ERROR = 0x12;
 	private static final String TAG = "NewsPage";
 
 	private LiveListView lvNews;
 	private NewsList newsList;
-	private NewsListAdapter listAdapter;
+	private NewsAdapter listAdapter;
 	private Spinner typeSpinner;
 	private int[] newsTypes = { 21, 22, 23 };
 
@@ -86,7 +88,7 @@ public class FragNews extends BaseFragment {
 			}
 		});
 		newsList = new NewsList();
-		listAdapter = new NewsListAdapter(mContext, newsList.getData());
+		listAdapter = new NewsAdapter(mContext, newsList.getData());
 		lvNews.setAdapter(listAdapter);
 		//
 		loadNewsList();
@@ -95,7 +97,7 @@ public class FragNews extends BaseFragment {
 	private OnRequestListener loadNewsListener = new OnRequestListener() {
 		@Override
 		public void onError(String msg) {
-			handler.sendEmptyMessage(MSG_ERROR);
+			handler.sendEmptyMessage(MSG_NEWS_ERROR);
 		}
 
 		@Override
@@ -104,7 +106,7 @@ public class FragNews extends BaseFragment {
 			try {
 				newsList.parseJSON(response);
 				CacheUtil.saveCache(mContext, newsList.getCacheKey(), newsList);
-				handler.sendEmptyMessage(MSG_OK);
+				handler.sendEmptyMessage(MSG_NEWS_OK);
 			} catch (JSONException e) {
 				onError(null);
 			}
@@ -114,13 +116,13 @@ public class FragNews extends BaseFragment {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
-			case MSG_OK:
+			case MSG_NEWS_OK:
 				listAdapter.notifyDataSetChanged();
 				lvNews.onRefreshComplete();
 				lvNews.onMoreComplete();
 				break;
-			case MSG_ERROR:
-				UIHelper.showToast(mContext, R.string.get_news_error, 0);
+			case MSG_NEWS_ERROR:
+				UIHelper.showToast(mContext, R.string.get_news_error);
 				break;
 			default:
 				super.handleMessage(msg);
@@ -143,11 +145,9 @@ public class FragNews extends BaseFragment {
 		NewsList cacheList = (NewsList) CacheUtil.readCache(mContext, newsList.getCacheKey());
 		if (cacheList != null) {
 			newsList.copy(cacheList);
-			handler.sendEmptyMessage(MSG_OK);
-			Log.e(TAG, "已经有缓存，从缓存中载入");
+			handler.sendEmptyMessage(MSG_NEWS_OK);
 		} else {
 			if (!NetHelper.isNetworkConnected(mContext)) {
-				UIHelper.showToast(mContext, R.string.net_un_available, 0);
 				return;
 			}
 			new Thread(new Runnable() {
@@ -159,4 +159,27 @@ public class FragNews extends BaseFragment {
 		}
 	}
 
+	@Override
+	public void onPause() {
+		super.onPause();
+		Log.e(TAG, "onPause");
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		Log.e(TAG, "onResume");
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		Log.e(TAG, "onStart");
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		Log.e(TAG, "onStop");
+	}
 }

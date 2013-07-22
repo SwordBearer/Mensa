@@ -14,9 +14,9 @@ import android.widget.Toast;
 
 import com.mensa.R;
 import com.mensa.view.fragment.FragAbout;
-import com.mensa.view.fragment.FragQuote;
 import com.mensa.view.fragment.FragNews;
 import com.mensa.view.fragment.FragQuestion;
+import com.mensa.view.fragment.FragQuote;
 import com.mensa.view.fragment.FragSpecialColumn;
 import com.mensa.view.widget.TationBar;
 
@@ -64,8 +64,7 @@ public class MainActivity extends FragmentActivity {
 			long secondTime = System.currentTimeMillis();
 			// 如果两次按键时间间隔大于800毫秒，则不退出
 			if (secondTime - firstTime > 800) {
-				Toast.makeText(MainActivity.this, R.string.quit_tip, Toast.LENGTH_SHORT).show();
-				// 更新firstTime
+				UIHelper.showToast(this, R.string.quit_tip);
 				firstTime = secondTime;
 				return true;
 			} else {// 否则退出程序

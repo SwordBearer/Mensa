@@ -1,13 +1,17 @@
 package com.mensa.net;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * 缓存工具类
@@ -16,6 +20,7 @@ import android.content.Context;
  */
 public class CacheUtil {
 	public static final String KEY_NEWS = "lips_cache_news";
+	private static final String TAG = "CacheUtil";
 
 	/**
 	 * 保存缓存文件：建议缓存的数据是可序列化的，便于读取时进行反序列化操作
@@ -91,15 +96,32 @@ public class CacheUtil {
 		}
 	}
 
-	/**
-	 * 检测是否存在缓存
-	 * 
-	 * @param context
-	 * @param key
-	 * @return
-	 */
-	public static boolean isExistCache(Context context, String key) {
-		File cache = context.getFileStreamPath(key);
-		return cache.exists();
+	public static String saveToFile(Context context, String url, InputStream inputStream) {
+		String fileName = MD5Util.MD5Encode(url);// 加密后的文件名
+		BufferedInputStream bis = null;
+		BufferedOutputStream bos = null;
+		try {
+			bis = new BufferedInputStream(inputStream);
+			bos = new BufferedOutputStream(context.openFileOutput(fileName, Context.MODE_PRIVATE));
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = bis.read(buffer)) != -1) {
+				bos.write(buffer, 0, length);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (bis != null) {
+					bis.close();
+				}
+				if (bos != null) {
+					bos.flush();
+					bos.close();
+				}
+			} catch (IOException e2) {
+			}
+		}
+		return context.getFilesDir() + "/" + fileName;
 	}
 }

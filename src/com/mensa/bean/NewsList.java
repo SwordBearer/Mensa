@@ -35,7 +35,7 @@ public class NewsList extends BaseBean {
 		JSONArray ja = jo.getJSONArray("data");
 		this.data.clear();
 		for (int i = 0; i < ja.length(); i++) {
-			this.data.add(News.parseJSON(ja.getJSONObject(i)));
+			this.data.add(new News(ja.getJSONObject(i)));
 		}
 	}
 

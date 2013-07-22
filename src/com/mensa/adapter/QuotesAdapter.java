@@ -15,9 +15,13 @@ import com.mensa.bean.Quote;
 public class QuotesAdapter extends BaseListAdapter {
 
 	private ArrayList<String> chineseMarket = new ArrayList<String>();
+	int COLOR_GREEN, COLOR_RED;
 
 	public QuotesAdapter(Context context, List<?> data) {
 		super(context, data);
+		COLOR_GREEN = context.getResources().getColor(R.color.quote_green);
+		COLOR_RED = context.getResources().getColor(R.color.quote_red);
+
 		chineseMarket.add(context.getString(R.string.chinese_m_1));
 		chineseMarket.add(context.getString(R.string.chinese_m_2));
 		chineseMarket.add(context.getString(R.string.chinese_m_3));
@@ -50,15 +54,15 @@ public class QuotesAdapter extends BaseListAdapter {
 		// 中国市场 红涨绿跌
 		if (chineseMarket.indexOf(title) >= 0) {
 			if (amount > 0) {
-				color = Color.RED;
+				color = COLOR_RED;
 			} else {
-				color = Color.GREEN;
+				color = COLOR_GREEN;
 			}
 		} else {// 非中国市场 绿涨红跌
 			if (amount > 0) {
-				color = Color.GREEN;
+				color = COLOR_GREEN;
 			} else {
-				color = Color.RED;
+				color = COLOR_RED;
 			}
 		}
 		holder.tvChangeAmount.setTextColor(color);
