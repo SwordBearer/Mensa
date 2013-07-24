@@ -1,51 +1,55 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/host"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    android:layout_height="match_parent" >
 
-    <com.mensa.view.widget.TationBar
-        android:id="@+id/home_tactionbar"
-        style="@style/home_TactionBar"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal" >
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/footer_bg" >
+        </TabWidget>
 
-        <com.mensa.view.widget.Tab
-            style="@style/home_TactionBarTab"
-            android:layout_weight="1"
-            android:checked="false"
-            android:drawableTop="@drawable/test_tab"
-            android:text="@string/news" />
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@android:id/tabs" >
 
-        <com.mensa.view.widget.Tab
-            style="@style/home_TactionBarTab"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/test_tab"
-            android:text="@string/quote" />
+            <fragment
+                android:id="@+id/frag_news"
+                android:name="com.mensa.view.fragment.FragNews"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-        <com.mensa.view.widget.Tab
-            style="@style/home_TactionBarTab"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/test_tab"
-            android:text="@string/special_colunm" />
+            <fragment
+                android:id="@+id/frag_quote"
+                android:name="com.mensa.view.fragment.FragQuote"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-        <com.mensa.view.widget.Tab
-            style="@style/home_TactionBarTab"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/test_tab"
-            android:text="@string/question" />
+            <fragment
+                android:id="@+id/frag_special_column"
+                android:name="com.mensa.view.fragment.FragSpecialColumn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-        <com.mensa.view.widget.Tab
-            style="@style/home_TactionBarTab"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/test_tab"
-            android:text="@string/about" />
-    </com.mensa.view.widget.TationBar>
+            <fragment
+                android:id="@+id/frag_question"
+                android:name="com.mensa.view.fragment.FragQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/home_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/home_tactionbar" />
+            <fragment
+                android:id="@+id/frag_about"
+                android:name="com.mensa.view.fragment.FragAbout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+    </RelativeLayout>
 
-</RelativeLayout>
+</TabHost>

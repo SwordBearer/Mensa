@@ -45,9 +45,7 @@ public class FragQuestion extends BaseFragment {
 		lvExperts = (ListView) rootView.findViewById(R.id.frag_question_lv);
 		lvExperts.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent detailsIntent = new Intent(getActivity(), ExpertDetailsActivity.class);
-				detailsIntent.putExtra("extra_expert_id", experts.get(position).getId());
-				startActivity(detailsIntent);
+				goToDetails(experts.get(position).getId());
 			}
 		});
 		adapter = new ExpertAdapter(mContext, experts);
@@ -57,15 +55,21 @@ public class FragQuestion extends BaseFragment {
 	}
 
 	private void loadExperts() {
+		if (!NetHelper.isNetworkConnected(mContext)) {
+			return;
+		}
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				if (!NetHelper.isNetworkConnected(mContext)) {
-					return;
-				}
 				NetHelper.getExperts(loadExpertsListener);
 			}
 		}).start();
+	}
+
+	private void goToDetails(int id) {
+		Intent detailsIntent = new Intent(getActivity(), ExpertDetailsActivity.class);
+		detailsIntent.putExtra("extra_expert_id", id);
+		startActivity(detailsIntent);
 	}
 
 	private OnRequestListener loadExpertsListener = new OnRequestListener() {
@@ -85,6 +89,10 @@ public class FragQuestion extends BaseFragment {
 					experts.add(new Expert(ja.getJSONObject(i)));
 				}
 				handler.sendEmptyMessage(MSG_EXPERTS_OK);
+				if (ja.length() == 1) {
+					goToDetails(new Expert(ja.getJSONObject(0)).getId());
+					return;
+				}
 			} catch (JSONException e) {
 				onError(null);
 			}

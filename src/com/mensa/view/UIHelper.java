@@ -9,6 +9,12 @@ import android.widget.Toast;
 import com.mensa.R;
 
 public class UIHelper {
+	/**
+	 * 显示Toast
+	 * 
+	 * @param context
+	 * @param msg
+	 */
 	public static void showToast(Context context, int msg) {
 		if (context == null)
 			return;

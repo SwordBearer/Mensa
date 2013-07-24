@@ -8,14 +8,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -32,8 +33,13 @@ import com.mensa.net.NetHelper;
 import com.mensa.net.OnRequestListener;
 import com.mensa.view.widget.AsyncImageView;
 
-public class ExpertDetailsActivity extends Activity {
-	String TAG = "ExpertDetailsActivity";
+/**
+ * 专家详情页面
+ * 
+ * @author SwordBearer
+ * 
+ */
+public class ExpertDetailsActivity extends Activity implements OnClickListener {
 	public static final int MSG_GET_EXPERT_OK = 0x41;
 	public static final int MSG_GET_EXPERT_ERROR = 0x42;
 	public static final int MSG_GET_QA_OK = 0x43;
@@ -77,16 +83,9 @@ public class ExpertDetailsActivity extends Activity {
 
 		qAdapter = new QuestionAdapter(this, questions);
 		lvQuestions.setAdapter(qAdapter);
-		btnPhone.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String phone = mExpert.getPhone();
-				if (phone == null || phone.equals(""))
-					return;
-				Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mExpert.getPhone()));
-				startActivity(intent);
-			}
-		});
+		btnPhone.setOnClickListener(this);
+		btnSubmit.setOnClickListener(this);
+		findViewById(R.id.expert_details_screen).setOnClickListener(this);
 		lvQuestions.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -95,40 +94,43 @@ public class ExpertDetailsActivity extends Activity {
 				startActivity(detailsIntent);
 			}
 		});
-		btnSubmit.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				submitQuestion();
-			}
-		});
 
 		loadData(expertId);
 	}
 
+	/**
+	 * 获取数据
+	 * 
+	 * @param expertId 专家的ID
+	 */
 	private void loadData(final int expertId) {
+		if (!NetHelper.isNetworkConnected(ExpertDetailsActivity.this)) {
+			return;
+		}
 		new Thread((new Runnable() {
 			@Override
 			public void run() {
-				if (!NetHelper.isNetworkConnected(ExpertDetailsActivity.this)) {
-					return;
-				}
 				NetHelper.getExpert(expertId, loadExpertListener);
-				Log.e(TAG, "启动Qa查询 ");
 				NetHelper.getExpertQA(expertId, loadQAListener);
 			}
 		})).start();
 	}
 
+	/**
+	 * 下载头像
+	 */
 	private void loadExpertImage() {
 		String img = mExpert.getImg();
 		if (img == null || img.equals(""))
 			return;
 		if (!NetHelper.isNetworkConnected(this))
 			return;
-		Looper.prepare();
 		imageView.loadImage(img);
 	}
 
+	/**
+	 * 向专家提交问题
+	 */
 	private void submitQuestion() {
 		final String content = edQuestion.getText().toString().trim();
 		if (content.equals("")) {
@@ -151,9 +153,14 @@ public class ExpertDetailsActivity extends Activity {
 		tvName.setText(mExpert.getName());
 		tvPosition.setText(mExpert.getPosition());
 		tvDesc.setText(mExpert.getDesc());
-		btnPhone.setText(mExpert.getPhone());
-		btnPhone.setVisibility(View.VISIBLE);
-		btnPhone.setClickable(true);
+		String phone = mExpert.getPhone();
+		if (phone == null || phone.equals("")) {
+			btnPhone.setVisibility(View.INVISIBLE);
+		} else {
+			btnPhone.setText(phone);
+			btnPhone.setVisibility(View.VISIBLE);
+			btnPhone.setClickable(true);
+		}
 	}
 
 	private OnRequestListener loadExpertListener = new OnRequestListener() {
@@ -164,7 +171,6 @@ public class ExpertDetailsActivity extends Activity {
 
 		@Override
 		public void onComplete(Object object) {
-			Log.e(TAG, "loadExpertListener 数据" + object.toString());
 			try {
 				JSONObject jo = new JSONObject(object.toString());
 				mExpert = new Expert(jo);
@@ -184,7 +190,6 @@ public class ExpertDetailsActivity extends Activity {
 
 		@Override
 		public void onComplete(Object object) {
-			Log.e(TAG, "获得的Question是 " + object.toString());
 			try {
 				JSONArray ja = new JSONArray(object.toString());
 				questions.clear();
@@ -212,7 +217,6 @@ public class ExpertDetailsActivity extends Activity {
 
 		@Override
 		public void onComplete(Object object) {
-			Log.e(TAG, "提交问题的结果是 " + object.toString());
 			try {
 				JSONObject jo = new JSONObject(object.toString());
 				int status = jo.getInt("status");
@@ -257,4 +261,21 @@ public class ExpertDetailsActivity extends Activity {
 			}
 		}
 	};
+
+	@Override
+	public void onClick(View v) {
+		if (v == btnSubmit) {
+			submitQuestion();
+		} else if (v == btnPhone) {
+			String phone = mExpert.getPhone();
+			if (phone == null || phone.equals(""))
+				return;
+			Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mExpert.getPhone()));
+			startActivity(intent);
+		} else if (v.getId() == R.id.expert_details_screen) {
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(edQuestion.getWindowToken(), 0);
+		}
+	}
+
 }

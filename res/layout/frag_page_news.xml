@@ -13,6 +13,7 @@
         <Spinner
             android:id="@+id/frag_news_spinner"
             style="@style/HeadSpinner"
+            android:layout_centerVertical="true"
             android:spinnerMode="dropdown" />
     </RelativeLayout>
 

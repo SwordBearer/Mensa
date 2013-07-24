@@ -22,6 +22,7 @@ import com.mensa.application.MensaAppliaction;
 import com.mensa.view.UIHelper;
 
 public class NetHelper {
+
 	public static final int APP_ID = 1;
 	public static final String APP_VERSION = "1.3";
 	public static final String APP_SMS_CENTER = "13521915046";
@@ -38,6 +39,11 @@ public class NetHelper {
 	public static final String URL_EXPERT_QA = APP_URL + "/handler/app/expertsdetailsqa.ashx?";
 	public static final String URL_SUBMIT_QUESTION = APP_URL + "/handler/app/question.ashx?";
 	public static final String URL_QUESTION_ARTICLE = APP_URL + "/handler/app/questionarticle.ashx?";
+	public static final String URL_REGISTER = APP_URL + "/handler/app/userregister.ashx?";
+	public static final String URL_LOGIN = APP_URL + "/handler/app/userlogin.ashx?";
+	public static final String URL_FEEDBACK = APP_URL + "/handler/app/feedback.ashx?";
+
+	public static final int MSG_NOT_NETWORK = 0x404;
 
 	/**
 	 * 检测网络是否可用
@@ -48,6 +54,7 @@ public class NetHelper {
 		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo ni = cm.getActiveNetworkInfo();
 		if (ni == null || !ni.isConnectedOrConnecting()) {
+			// 提示用户网络异常
 			UIHelper.showToast(context, R.string.net_un_available);
 			return false;
 		}
@@ -55,6 +62,14 @@ public class NetHelper {
 	}
 
 	/******************************* API *************************************/
+	/**
+	 * 获得App信息
+	 * 
+	 * @param appId
+	 * @param ver
+	 * @param screenWidth
+	 * @param listener
+	 */
 	public static void getAppInfo(int appId, String ver, int screenWidth, OnRequestListener listener) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("appid", appId);
@@ -64,14 +79,28 @@ public class NetHelper {
 		_get(url, listener);
 	}
 
+	/**
+	 * 获得新闻列表
+	 * 
+	 * @param type
+	 * @param page
+	 * @param listener
+	 */
 	public static void getNews(int type, int page, OnRequestListener listener) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("type2", type);
 		params.put("page", page);
 		String url = URL_NEWS + generateParameters(params);
+		Log.e("News", "getNews url==>" + url);
 		_get(url, listener);
 	}
 
+	/**
+	 * 获得新闻详情
+	 * 
+	 * @param id
+	 * @param listener
+	 */
 	public static void getNewsDetails(int id, OnRequestListener listener) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("id", id);
@@ -79,6 +108,12 @@ public class NetHelper {
 		_get(url, listener);
 	}
 
+	/**
+	 * 获得市场行情
+	 * 
+	 * @param areaId
+	 * @param listener
+	 */
 	public static void getQuotes(int areaId, OnRequestListener listener) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("area", areaId);
@@ -86,6 +121,12 @@ public class NetHelper {
 		_get(url, listener);
 	}
 
+	/**
+	 * 获得某一专家信息
+	 * 
+	 * @param expertId
+	 * @param listener
+	 */
 	public static void getExpert(int expertId, OnRequestListener listener) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("appid", MensaAppliaction.APP_ID);
@@ -94,6 +135,11 @@ public class NetHelper {
 		_get(url, listener);
 	}
 
+	/**
+	 * 获得专家的文章列表
+	 * 
+	 * @param listener
+	 */
 	public static void getPosts(OnRequestListener listener) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("appid", MensaAppliaction.APP_ID);
@@ -101,6 +147,11 @@ public class NetHelper {
 		_get(url, listener);
 	}
 
+	/**
+	 * 获得所有专家列表
+	 * 
+	 * @param listener
+	 */
 	public static void getExperts(OnRequestListener listener) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("appid", MensaAppliaction.APP_ID);
@@ -109,6 +160,12 @@ public class NetHelper {
 		_get(url, listener);
 	}
 
+	/**
+	 * 获得某一个专家的问答列表
+	 * 
+	 * @param expertId
+	 * @param listener
+	 */
 	public static void getExpertQA(int expertId, OnRequestListener listener) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("appid", MensaAppliaction.APP_ID);
@@ -117,6 +174,15 @@ public class NetHelper {
 		_get(url, listener);
 	}
 
+	/**
+	 * 提交问题
+	 * 
+	 * @param content
+	 * @param to
+	 * @param allow
+	 * @param key
+	 * @param listener
+	 */
 	public static void submitQuestion(String content, int to, boolean allow, String key, OnRequestListener listener) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("appid", MensaAppliaction.APP_ID);
@@ -129,6 +195,12 @@ public class NetHelper {
 		_get(url, listener);
 	}
 
+	/**
+	 * 获得问题内容
+	 * 
+	 * @param id
+	 * @param listener
+	 */
 	public static void getQuestionArticle(int id, OnRequestListener listener) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("appid", MensaAppliaction.APP_ID);
@@ -138,9 +210,64 @@ public class NetHelper {
 		_get(url, listener);
 	}
 
+	/**
+	 * 注册
+	 * 
+	 * @param name
+	 * @param passwd
+	 * @param listener
+	 */
+	public static void register(String name, String passwd, OnRequestListener listener) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("username", name);
+		params.put("password", passwd);
+		String url = URL_REGISTER + generateParameters(params);
+		Log.e("TEST", "注册 " + url);
+		_get(url, listener);
+	}
+
+	/**
+	 * 登录
+	 * 
+	 * @param name
+	 * @param passwd
+	 * @param listener
+	 */
+	public static void login(String name, String passwd, OnRequestListener listener) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("username", name);
+		params.put("password", passwd);
+		String url = URL_LOGIN + generateParameters(params);
+		Log.e("TEST", "登陆 " + url);
+		_get(url, listener);
+	}
+
+	/**
+	 * 反馈
+	 * 
+	 * @param type
+	 * @param email
+	 * @param content
+	 * @param listener
+	 */
+	public static void feedback(String type, String email, String content, OnRequestListener listener) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("appid", MensaAppliaction.APP_ID);
+		params.put("type", type);
+		params.put("mail", email);
+		params.put("content", content);
+		String url = URL_FEEDBACK + generateParameters(params);
+		_get(url, listener);
+	}
+
 	/***************************** HTTP GET **********************************/
+	/**
+	 * 使用HTTP Get网络数据
+	 * 
+	 * @param url
+	 * @param listener
+	 */
 	private static void _get(String url, OnRequestListener listener) {
-		// Log.e("TEST", "url " + url);
 		try {
 			String response = httpGetStr(url);
 			Log.e("_get", "获取的数据是 " + response);
@@ -199,6 +326,12 @@ public class NetHelper {
 		return new String(outStream.toByteArray());
 	}
 
+	/**
+	 * 生成GET的参数
+	 * 
+	 * @param map
+	 * @return
+	 */
 	private static String generateParameters(Map<String, Object> map) {
 		StringBuffer result = new StringBuffer();
 		for (String key : map.keySet()) {

@@ -34,7 +34,7 @@
     <string name="chinese_m_4">中小板指</string>
     <string name="chinese_m_5">创业板指</string>
     <!-- hint -->
-    <string name="input_question">在这里输入您的问题...</string>
+    <string name="input_question">在这里输入您的问题</string>
     <string name="allow">接受回访(免费)</string>
     <string name="submit_question">提交问题</string>
     <string name="question_article">问题详情</string>
@@ -45,7 +45,30 @@
     <string name="check_update">检测新版本</string>
     <string name="app_liecence">软件使用协议</string>
     <string name="feedback">意见反馈</string>
-    <string name="quit">退出</string>
+    <string name="login">登录</string>
+    <string name="hint_username">用户名</string>
+    <string name="hint_password">密码</string>
+    <string name="hint_password2">确认密码</string>
+    <string name="username_too_short">用户名长度至少为2个字符</string>
+    <string name="password_too_short">密码长度至少为6个字符</string>
+    <string name="password_not_equal">两次输入的密码不一样</string>
+    <string name="login_ok">登录成功</string>
+    <string name="login_error">登录失败</string>
+    <string name="register_ok">注册成功</string>
+    <string name="register_error">注册失败</string>
+    <string name="register">注册</string>
+    <string name="remember">记住账号</string>
+    <string name="logout">注销</string>
     <string name="mianzeshengming"></string>
+    <string name="no_update">已是最新版本，无需更新</string>
+    <!--  -->
+    <string name="ok">确定</string>
+    <string name="notification">通知</string>
+    <string name="feed_success">感谢您的反馈，您的意见对我们很重要</string>
+    <string name="feed_failed">提交失败,请稍后再试</string>
+    <string name="hint_feed_email">请输入您的邮箱</string>
+    <string name="hint_feed_content">具体反馈意见</string>
+    <string name="feed_submit">提交意见</string>
+    <string name="feed_not_null">邮箱或者反馈意见不能为空</string>
 
 </resources>

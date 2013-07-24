@@ -42,16 +42,19 @@ public class QuestionArticleActivity extends Activity {
 	}
 
 	private void loadData(final int id) {
+		if (!NetHelper.isNetworkConnected(QuestionArticleActivity.this)) {
+			return;
+		}
 		new Thread(new Runnable() {
 			public void run() {
-				if (!NetHelper.isNetworkConnected(QuestionArticleActivity.this)) {
-					return;
-				}
 				NetHelper.getQuestionArticle(id, loadQuestionListener);
 			}
 		}).start();
 	}
 
+	/**
+	 * 更新界面
+	 */
 	private void updateViews() {
 		tvQcontent.setText(questionArticle.getQcontent());
 		tvQInfo.setText(questionArticle.getQauthor() + " " + questionArticle.getQdate());
@@ -84,6 +87,7 @@ public class QuestionArticleActivity extends Activity {
 				updateViews();
 				break;
 			case MSG_ERROR:
+				// 提示错误
 				UIHelper.showToast(QuestionArticleActivity.this, R.string.get_data_error);
 				break;
 			}

@@ -15,7 +15,7 @@ import com.mensa.net.MD5Util;
 import com.mensa.net.NetHelper;
 
 /**
- * deprecated:需要改进，加入缓存功能
+ * deprecated:一部加载图片控件
  * 
  * @author swordbearer
  */

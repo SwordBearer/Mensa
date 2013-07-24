@@ -17,7 +17,13 @@ public class AppInfo extends BaseBean {
 	private String subdomain;
 	private String webtitle;
 
-	private AppInfo() {}
+	public AppInfo() {
+		this.ver = "1.3";
+		this.expertId = 1;
+		this.type = 1;
+		this.url = "";
+		this.info = "";
+	}
 
 	public static AppInfo parseJSON(JSONObject jo) {
 		AppInfo appInfo = new AppInfo();

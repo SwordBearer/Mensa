@@ -2,11 +2,11 @@ package com.mensa.view.fragment;
 
 import org.json.JSONException;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +18,8 @@ import android.widget.Spinner;
 
 import com.mensa.R;
 import com.mensa.adapter.NewsAdapter;
+import com.mensa.application.MensaAppliaction;
+import com.mensa.bean.AppInfo;
 import com.mensa.bean.NewsList;
 import com.mensa.net.CacheUtil;
 import com.mensa.net.NetHelper;
@@ -28,6 +30,12 @@ import com.mensa.view.widget.LiveListView;
 import com.mensa.view.widget.LiveListView.OnMoreListener;
 import com.mensa.view.widget.LiveListView.OnRefreshListener;
 
+/**
+ * 新闻列表页面
+ * 
+ * @author SwordBearer
+ * 
+ */
 public class FragNews extends BaseFragment {
 	private static final int MSG_NEWS_OK = 0x11;
 	private static final int MSG_NEWS_ERROR = 0x12;
@@ -38,6 +46,7 @@ public class FragNews extends BaseFragment {
 	private NewsAdapter listAdapter;
 	private Spinner typeSpinner;
 	private int[] newsTypes = { 21, 22, 23 };
+	private AlertDialog.Builder builder;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,7 +61,7 @@ public class FragNews extends BaseFragment {
 		typeSpinner = (Spinner) rootView.findViewById(R.id.frag_news_spinner);
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.view_spinner, getResources().getStringArray(R.array.news_types));
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
 		typeSpinner.setAdapter(adapter);
 
 		typeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -70,7 +79,9 @@ public class FragNews extends BaseFragment {
 		lvNews.setOnRefreshListener(new OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				refresh();
+				CacheUtil.deleteCache(mContext, newsList.getCacheKey());
+				newsList.setPage(1);
+				loadNewsList();
 			}
 		});
 		lvNews.setOnMoreListener(new OnMoreListener() {
@@ -91,7 +102,28 @@ public class FragNews extends BaseFragment {
 		listAdapter = new NewsAdapter(mContext, newsList.getData());
 		lvNews.setAdapter(listAdapter);
 		//
+		showInfo();// 显示系统信息
+
 		loadNewsList();
+	}
+
+	/**
+	 * 显示系统信息
+	 * 
+	 * @param context
+	 */
+	private void showInfo() {
+		AppInfo appInfo = MensaAppliaction.getAppInfo();
+		if (appInfo == null)
+			return;
+		String info = MensaAppliaction.getAppInfo().getInfo();
+		if (info == null || info.equals(""))
+			return;
+		builder = new AlertDialog.Builder(mContext);
+		builder.setTitle(R.string.notification);
+		builder.setMessage(info);
+		builder.setPositiveButton(R.string.ok, null);
+		builder.show();
 	}
 
 	private OnRequestListener loadNewsListener = new OnRequestListener() {
@@ -130,16 +162,14 @@ public class FragNews extends BaseFragment {
 		}
 	};
 
-	private void refresh() {
-		CacheUtil.deleteCache(mContext, newsList.getCacheKey());
-		loadNewsList();
-	}
-
 	private void getNextPage() {
 		newsList.setPage(newsList.getPage() + 1);
 		loadNewsList();
 	}
 
+	/**
+	 * 加载数据列表
+	 */
 	private void loadNewsList() {
 		// 如果已经有缓存文件，则不从网络下载
 		NewsList cacheList = (NewsList) CacheUtil.readCache(mContext, newsList.getCacheKey());
@@ -160,26 +190,10 @@ public class FragNews extends BaseFragment {
 	}
 
 	@Override
-	public void onPause() {
-		super.onPause();
-		Log.e(TAG, "onPause");
+	public void onDestroy() {
+		super.onDestroy();
+		if (builder != null) {
+		}
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		Log.e(TAG, "onResume");
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		Log.e(TAG, "onStart");
-	}
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		Log.e(TAG, "onStop");
-	}
 }

@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +32,12 @@ import com.mensa.view.NewsDetailsActivity;
 import com.mensa.view.UIHelper;
 import com.mensa.view.widget.AsyncImageView;
 
+/**
+ * 专栏页面
+ * 
+ * @author SwordBearer
+ * 
+ */
 public class FragSpecialColumn extends BaseFragment {
 	private static final int MSG_OK = 0x31;
 	private static final int MSG_ERROR = 0x32;
@@ -86,13 +91,16 @@ public class FragSpecialColumn extends BaseFragment {
 		loadData();
 	}
 
+	/**
+	 * 加载数据
+	 */
 	private void loadData() {
+		if (!NetHelper.isNetworkConnected(mContext)) {
+			return;
+		}
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				if (!NetHelper.isNetworkConnected(mContext)) {
-					return;
-				}
 				NetHelper.getExpert(mExpert.getId(), loadExportListener);
 				NetHelper.getPosts(loadPostsListener);
 			}
@@ -105,17 +113,28 @@ public class FragSpecialColumn extends BaseFragment {
 			return;
 		if (!NetHelper.isNetworkConnected(mContext))
 			return;
-		Looper.prepare();
-		imageView.loadImage(img);
+//		try {
+			imageView.loadImage(img);
+//		} catch (Exception ex) {
+		// ex.printStackTrace();
+		// }
 	}
 
+	/**
+	 * 更新界面
+	 */
 	private void updateViews() {
 		// 更新上半部分
 		if (mExpert.getName() != null && !mExpert.getName().equals("")) {
 			tvName.setText(mExpert.getName());
 			tvPosition.setText(mExpert.getPosition());
 			tvDesc.setText(mExpert.getDesc());
-			btnPhone.setText(mExpert.getPhone());
+			String phone = mExpert.getPhone();
+			if (phone == null || phone.equals("")) {
+				btnPhone.setVisibility(View.INVISIBLE);
+				return;
+			}
+			btnPhone.setText(phone);
 			btnPhone.setVisibility(View.VISIBLE);
 			btnPhone.setClickable(true);
 		}

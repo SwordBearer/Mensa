@@ -1,58 +1,40 @@
 package com.mensa.view;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
-import android.view.ViewGroup;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.Toast;
+import android.view.LayoutInflater;
+import android.widget.TabHost;
 
 import com.mensa.R;
-import com.mensa.view.fragment.FragAbout;
-import com.mensa.view.fragment.FragNews;
-import com.mensa.view.fragment.FragQuestion;
-import com.mensa.view.fragment.FragQuote;
-import com.mensa.view.fragment.FragSpecialColumn;
-import com.mensa.view.widget.TationBar;
 
+/**
+ * 程序主界面
+ * 
+ * @author SwordBearer
+ * 
+ */
 public class MainActivity extends FragmentActivity {
 	protected static final String TAG = "MainActivity";
 	private long firstTime;
-
-	private ViewPager mViewPager;
-	private HomePageAdapter mPageAdapter;
-	private TationBar mTationBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		mTationBar = (TationBar) findViewById(R.id.home_tactionbar);
-		mViewPager = (ViewPager) findViewById(R.id.home_pager);
-		mPageAdapter = new HomePageAdapter(getSupportFragmentManager());
-		mViewPager.setAdapter(mPageAdapter);
+		TabHost tabHost = (TabHost) findViewById(R.id.host);
+		tabHost.setup();
 
-		mTationBar.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				int index = mTationBar.getCheckedIndex();
-				if (mViewPager.getCurrentItem() != index)
-					mViewPager.setCurrentItem(index);
-			}
-		});
-		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-			@Override
-			public void onPageSelected(int position) {
-				super.onPageSelected(position);
-				mTationBar.setCurrentTab(position);
-			}
-		});
-		mTationBar.setCurrentTab(0);
+		LayoutInflater inflater = LayoutInflater.from(this);
+		tabHost.addTab(tabHost.newTabSpec("新闻").setIndicator(inflater.inflate(R.layout.view_tab_news, null, false)).setContent(R.id.frag_news));
+		tabHost.addTab(tabHost.newTabSpec("行情").setIndicator(inflater.inflate(R.layout.view_tab_quote, null, false)).setContent(R.id.frag_quote));
+		tabHost.addTab(tabHost.newTabSpec("专栏").setIndicator(inflater.inflate(R.layout.view_tab_special, null, false))
+				.setContent(R.id.frag_special_column));
+		tabHost.addTab(tabHost.newTabSpec("提问").setIndicator(inflater.inflate(R.layout.view_tab_question, null, false))
+				.setContent(R.id.frag_question));
+		tabHost.addTab(tabHost.newTabSpec("关于").setIndicator(inflater.inflate(R.layout.view_tab_about, null, false)).setContent(R.id.frag_about));
+
+		tabHost.setCurrentTab(0);
 	}
 
 	/**
@@ -73,42 +55,4 @@ public class MainActivity extends FragmentActivity {
 		}
 		return super.onKeyUp(keyCode, event);
 	}
-
-	/**
-	 * 
-	 * @author SwordBearer
-	 * 
-	 */
-	class HomePageAdapter extends FragmentPagerAdapter {
-
-		public HomePageAdapter(FragmentManager fm) {
-			super(fm);
-		}
-
-		@Override
-		public Fragment getItem(int index) {
-			switch (index) {
-			case 0:
-				return new FragNews();
-			case 1:
-				return new FragQuote();
-			case 2:
-				return new FragSpecialColumn();
-			case 3:
-				return new FragQuestion();
-			case 4:
-				return new FragAbout();
-			}
-			return null;
-		}
-
-		@Override
-		public int getCount() {
-			return 5;
-		}
-
-		@Override
-		public void destroyItem(ViewGroup container, int position, Object object) {}
-	}
-
 }

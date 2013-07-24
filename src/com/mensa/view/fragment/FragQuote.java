@@ -60,7 +60,7 @@ public class FragQuote extends BaseFragment {
 		areaSpinner = (Spinner) rootView.findViewById(R.id.frag_quote_spinner);
 		lvQuotes = (ListView) rootView.findViewById(R.id.frag_quote_lv);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.view_spinner, getResources().getStringArray(R.array.quote_areas));
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
 		areaSpinner.setAdapter(adapter);
 		areaSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -78,6 +78,9 @@ public class FragQuote extends BaseFragment {
 	}
 
 	private void loadQuotes(int delay) {
+		if (!NetHelper.isNetworkConnected(mContext)) {
+			return;
+		}
 		LoadQuotesThread thread = new LoadQuotesThread();
 		thread.setDelay(delay);
 		thread.start();
@@ -102,6 +105,9 @@ public class FragQuote extends BaseFragment {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
+			case NetHelper.MSG_NOT_NETWORK:
+				UIHelper.showToast(mContext, R.string.net_un_available);
+				break;
 			case MSG_QUOTES_OK:
 				String response = msg.obj.toString();
 				try {
@@ -144,11 +150,9 @@ public class FragQuote extends BaseFragment {
 			// 如果不需要刷新
 			if (!isUpdating)
 				return;
+
 			try {
 				Thread.sleep(delay);
-				if (!NetHelper.isNetworkConnected(mContext)) {
-					return;
-				}
 				handler.sendEmptyMessage(MSG_SHOW_PROGRESS);
 				NetHelper.getQuotes(currentArea, loadQuotesListener);
 			} catch (InterruptedException e) {

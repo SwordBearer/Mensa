@@ -13,5 +13,11 @@
         <item>澳洲市场</item>
         <item>非洲市场</item>
     </string-array>
+    <string-array name="feedback_types">
+        <item>报告滥用</item>
+        <item>新功能建议</item>
+        <item>故障提交</item>
+        <item>真好用，表扬一下</item>
+    </string-array>
 
 </resources>
