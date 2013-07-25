@@ -9,12 +9,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.Button;
 
 import com.mensa.R;
 import com.mensa.adapter.NewsAdapter;
@@ -29,6 +30,7 @@ import com.mensa.view.UIHelper;
 import com.mensa.view.widget.LiveListView;
 import com.mensa.view.widget.LiveListView.OnMoreListener;
 import com.mensa.view.widget.LiveListView.OnRefreshListener;
+import com.mensa.view.widget.PopupMenu;
 
 /**
  * 新闻列表页面
@@ -44,7 +46,7 @@ public class FragNews extends BaseFragment {
 	private LiveListView lvNews;
 	private NewsList newsList;
 	private NewsAdapter listAdapter;
-	private Spinner typeSpinner;
+	private Button btnTypes;
 	private int[] newsTypes = { 21, 22, 23 };
 	private AlertDialog.Builder builder;
 
@@ -57,21 +59,18 @@ public class FragNews extends BaseFragment {
 
 	@Override
 	public void initViews(View rootView) {
+		final String[] array = getResources().getStringArray(R.array.news_types);
 		lvNews = (LiveListView) rootView.findViewById(R.id.frag_news_lv);
-		typeSpinner = (Spinner) rootView.findViewById(R.id.frag_news_spinner);
+		btnTypes = (Button) rootView.findViewById(R.id.frag_news_type_btn);
+		btnTypes.setText(array[0]);
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.view_spinner, getResources().getStringArray(R.array.news_types));
 		adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
-		typeSpinner.setAdapter(adapter);
-
-		typeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				newsList.setType(newsTypes[position]);
-				newsList.setPage(1);
-				loadNewsList();
+		btnTypes.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showTypesList();
 			}
-
-			public void onNothingSelected(AdapterView<?> parent) {}
 		});
 
 		lvNews.isShowHeader(true);
@@ -103,8 +102,22 @@ public class FragNews extends BaseFragment {
 		lvNews.setAdapter(listAdapter);
 		//
 		showInfo();// 显示系统信息
-
 		loadNewsList();
+	}
+
+	private void showTypesList() {
+		final String[] array = getResources().getStringArray(R.array.news_types);
+		final PopupMenu popupMenu = new PopupMenu(mContext);
+		popupMenu.setWindow(array, btnTypes.getWidth(), LayoutParams.WRAP_CONTENT, new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				btnTypes.setText(array[position]);
+				newsList.setType(newsTypes[position]);
+				newsList.setPage(1);
+				loadNewsList();
+				popupMenu.dismiss();
+			}
+		});
+		popupMenu.showAsDropDown(btnTypes);
 	}
 
 	/**

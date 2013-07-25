@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.mensa.R;
 import com.mensa.application.MensaAppliaction;
+import com.mensa.bean.AppInfo;
 import com.mensa.view.FeedbackActivity;
 import com.mensa.view.LoginActivity;
 
@@ -49,7 +50,10 @@ public class FragAbout extends BaseFragment implements OnClickListener {
 		} else {
 			btnLogin.setText(R.string.logout);
 		}
-		String webtitle = MensaAppliaction.getAppInfo().getWebtitle();
+		AppInfo info = MensaAppliaction.getAppInfo();
+		if (info == null)
+			return;
+		String webtitle = info.getWebtitle();
 		if (webtitle != null) {
 			btnWebtitle.setText("移动客户端由 " + webtitle + " 运营");
 		}

@@ -13,12 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView.LayoutParams;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 
 import com.mensa.R;
 import com.mensa.adapter.QuotesAdapter;
@@ -26,6 +26,7 @@ import com.mensa.bean.Quote;
 import com.mensa.net.NetHelper;
 import com.mensa.net.OnRequestListener;
 import com.mensa.view.UIHelper;
+import com.mensa.view.widget.PopupMenu;
 
 public class FragQuote extends BaseFragment {
 	private static final int MSG_SHOW_PROGRESS = 0x21;
@@ -35,7 +36,7 @@ public class FragQuote extends BaseFragment {
 
 	private static final int UPDATE_STEP = 40000;
 
-	private Spinner areaSpinner;
+	private Button btnAreas;
 	private ProgressBar progressBar;
 	private int[] areaIds = { 1, 2, 3, 4, 5 };
 	private int currentArea = areaIds[0];
@@ -45,7 +46,7 @@ public class FragQuote extends BaseFragment {
 	private QuotesAdapter mAdapter;
 
 	// 是否需要刷新，当跳转到其他页面时，就停止刷新
-	private boolean isUpdating = false;
+	private boolean isUpdating = true;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,23 +58,19 @@ public class FragQuote extends BaseFragment {
 	@Override
 	public void initViews(View rootView) {
 		progressBar = (ProgressBar) rootView.findViewById(R.id.progress);
-		areaSpinner = (Spinner) rootView.findViewById(R.id.frag_quote_spinner);
+		btnAreas = (Button) rootView.findViewById(R.id.frag_quote_areas_btn);
 		lvQuotes = (ListView) rootView.findViewById(R.id.frag_quote_lv);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.view_spinner, getResources().getStringArray(R.array.quote_areas));
-		adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
-		areaSpinner.setAdapter(adapter);
-		areaSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+		final String[] array = getResources().getStringArray(R.array.quote_areas);
+		btnAreas.setText(array[0]);
+		btnAreas.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				currentArea = areaIds[position];
-				loadQuotes(0);
+			public void onClick(View v) {
+				showAreaList();
 			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {}
 		});
 		mAdapter = new QuotesAdapter(mContext, quotes);
 		lvQuotes.setAdapter(mAdapter);
+
 		loadQuotes(0);
 	}
 
@@ -81,9 +78,24 @@ public class FragQuote extends BaseFragment {
 		if (!NetHelper.isNetworkConnected(mContext)) {
 			return;
 		}
+		Log.e("TEST", "加载行情数据======================>");
 		LoadQuotesThread thread = new LoadQuotesThread();
 		thread.setDelay(delay);
 		thread.start();
+	}
+
+	private void showAreaList() {
+		final String[] array = getResources().getStringArray(R.array.quote_areas);
+		final PopupMenu popupMenu = new PopupMenu(mContext);
+		popupMenu.setWindow(array, btnAreas.getWidth(), LayoutParams.WRAP_CONTENT, new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				btnAreas.setText(array[position]);
+				currentArea = areaIds[position];
+				popupMenu.dismiss();
+				loadQuotes(0);
+			}
+		});
+		popupMenu.showAsDropDown(btnAreas);
 	}
 
 	private OnRequestListener loadQuotesListener = new OnRequestListener() {
@@ -150,7 +162,6 @@ public class FragQuote extends BaseFragment {
 			// 如果不需要刷新
 			if (!isUpdating)
 				return;
-
 			try {
 				Thread.sleep(delay);
 				handler.sendEmptyMessage(MSG_SHOW_PROGRESS);

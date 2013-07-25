@@ -22,6 +22,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -48,6 +49,7 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 	public static final int MSG_QUESTION_ERROR = 0x46;
 
 	private AsyncImageView imageView;
+	private ImageButton btnBack;
 	private TextView tvName, tvPosition, tvDesc;
 	private Button btnPhone;
 	private ListView lvQuestions;
@@ -70,6 +72,7 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 			finish();
 			return;
 		}
+		btnBack = (ImageButton) findViewById(R.id.expert_details_back);
 		imageView = (AsyncImageView) findViewById(R.id.expert_details_image);
 		tvName = (TextView) findViewById(R.id.expert_details_name);
 		tvPosition = (TextView) findViewById(R.id.expert_details_position);
@@ -81,6 +84,7 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 		cbAllow = (CheckBox) findViewById(R.id.submit_question_allow);
 		btnSubmit = (Button) findViewById(R.id.submit_question_submit);
 
+		btnBack.setOnClickListener(this);
 		qAdapter = new QuestionAdapter(this, questions);
 		lvQuestions.setAdapter(qAdapter);
 		btnPhone.setOnClickListener(this);
@@ -264,7 +268,9 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		if (v == btnSubmit) {
+		if (v == btnBack) {
+			finish();
+		} else if (v == btnSubmit) {
 			submitQuestion();
 		} else if (v == btnPhone) {
 			String phone = mExpert.getPhone();

@@ -9,10 +9,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.webkit.WebView;
+import android.widget.ImageButton;
 
 import com.mensa.R;
 import com.mensa.application.MensaAppliaction;
+import com.mensa.bean.AppInfo;
 import com.mensa.bean.News;
 import com.mensa.net.CacheUtil;
 import com.mensa.net.NetHelper;
@@ -30,12 +34,14 @@ public class NewsDetailsActivity extends FragmentActivity {
 
 	private WebView webView;
 	private News mNews;
+	private ImageButton btnBack;
 
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setContentView(R.layout.activity_news_details);
 		webView = (WebView) findViewById(R.id.details_webview);
+		btnBack = (ImageButton) findViewById(R.id.news_details_back);
 
 		Intent intent = getIntent();
 		mNews = (News) intent.getSerializableExtra("extra_news");
@@ -44,6 +50,11 @@ public class NewsDetailsActivity extends FragmentActivity {
 			finish();
 			return;
 		}
+		btnBack.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				finish();
+			}
+		});
 		loadNewsDetails();
 	}
 
@@ -66,14 +77,15 @@ public class NewsDetailsActivity extends FragmentActivity {
 	}
 
 	private void showNewsDetails() {
-		Log.e("TEST", "AppInfo " + "<div><a href='" + MensaAppliaction.getAppInfo().getBb_url() + "'><img src='"
-				+ MensaAppliaction.getAppInfo().getBb_img() + "'/></a></div>");
+		AppInfo info = MensaAppliaction.getAppInfo();
+		if (info == null) {
+			info = new AppInfo();
+		}
 		StringBuffer sBuffer = new StringBuffer();
 		sBuffer.append("<html><body style='background:#F0F0F0;padding:0px;'><div style='padding-left:10px;border-left:15px #CD0000 solid;'><div style='font-size:18px;font-weight:bold'>");
 		sBuffer.append(mNews.getTitle() + "</div>");
 		sBuffer.append("<div style='color:#828282;font-size:12px;'>" + mNews.getDate() + " 来源：" + mNews.getAuthor() + "</div></div>");
-		sBuffer.append("<div><a href='" + MensaAppliaction.getAppInfo().getBb_url() + "'><img src='" + MensaAppliaction.getAppInfo().getBb_img()
-				+ "'/></a></div>");
+		sBuffer.append("<div><a href='" + info.getBb_url() + "'><img src='" + info.getBb_img() + "'/></a></div>");
 		sBuffer.append("<div style='text-indent: 2em;padding:5px;'>");
 		sBuffer.append(mNews.getContent());
 		sBuffer.append("</div></body></html>");

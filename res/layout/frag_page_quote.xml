@@ -11,21 +11,18 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/loading_light_01"
+            android:progressDrawable="@drawable/loading_light_01"
             android:visibility="invisible" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/quote"
-            android:textColor="@color/white" />
+            style="@style/HeadTitle"
+            android:text="@string/quote" />
 
-        <Spinner
-            android:id="@+id/frag_quote_spinner"
+        <Button
+            android:id="@+id/frag_quote_areas_btn"
             style="@style/HeadSpinner"
             android:layout_centerVertical="true"
-            android:spinnerMode="dropdown" />
+            android:textColor="@color/white" />
     </RelativeLayout>
 
     <LinearLayout

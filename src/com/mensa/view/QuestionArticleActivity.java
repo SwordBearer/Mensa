@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mensa.R;
@@ -20,6 +23,7 @@ public class QuestionArticleActivity extends Activity {
 	private static final int MSG_ERROR = 0x52;
 	//
 	private QuestionArticle questionArticle;
+	private ImageButton btnBack;
 	private TextView tvQcontent, tvQInfo, tvAcontent, tvAInfo;
 
 	@Override
@@ -33,11 +37,17 @@ public class QuestionArticleActivity extends Activity {
 			finish();
 			return;
 		}
+		btnBack = (ImageButton) findViewById(R.id.question_article_back);
 		tvQcontent = (TextView) findViewById(R.id.question_content);
 		tvQInfo = (TextView) findViewById(R.id.question_info);
 		tvAcontent = (TextView) findViewById(R.id.answer_content);
 		tvAInfo = (TextView) findViewById(R.id.answer_info);
-
+		btnBack.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			};
+		});
 		loadData(id);
 	}
 

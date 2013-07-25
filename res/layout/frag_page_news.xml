@@ -10,11 +10,11 @@
             style="@style/HeadTitle"
             android:text="@string/news" />
 
-        <Spinner
-            android:id="@+id/frag_news_spinner"
+        <Button
+            android:id="@+id/frag_news_type_btn"
             style="@style/HeadSpinner"
             android:layout_centerVertical="true"
-            android:spinnerMode="dropdown" />
+            android:textColor="@color/white" />
     </RelativeLayout>
 
     <com.mensa.view.widget.LiveListView

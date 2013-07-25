@@ -6,6 +6,10 @@
 
     <RelativeLayout style="@style/AppHead" >
 
+        <ImageButton
+            android:id="@+id/news_details_back"
+            style="@style/ButtonBack" />
+
         <TextView
             style="@style/HeadTitle"
             android:text="@string/details_title" />

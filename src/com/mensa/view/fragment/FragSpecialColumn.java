@@ -113,11 +113,11 @@ public class FragSpecialColumn extends BaseFragment {
 			return;
 		if (!NetHelper.isNetworkConnected(mContext))
 			return;
-//		try {
+		try {
 			imageView.loadImage(img);
-//		} catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	/**

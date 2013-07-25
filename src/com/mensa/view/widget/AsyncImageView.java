@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
@@ -49,6 +50,7 @@ public class AsyncImageView extends ImageView {
 			return;
 		}
 		if (!isRunning) {
+			Looper.prepare();
 			new AsyncImageLoader().execute(url);
 		}
 	}

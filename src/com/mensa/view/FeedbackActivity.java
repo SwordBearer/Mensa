@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.mensa.R;
@@ -25,11 +26,12 @@ import com.mensa.net.OnRequestListener;
  * @author SwordBearer
  * 
  */
-public class FeedbackActivity extends Activity {
+public class FeedbackActivity extends Activity implements OnClickListener {
 	private static final int MSG_FEED_OK = 0x91;
 	private static final int MSG_FEED_ERROR = 0x92;
 
 	private Spinner spinner;
+	private ImageButton btnBack;
 	private EditText edEmail, edContent;
 	private Button btnSubmit;
 
@@ -40,6 +42,7 @@ public class FeedbackActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_feedback);
 
+		btnBack = (ImageButton) findViewById(R.id.feed_back);
 		spinner = (Spinner) findViewById(R.id.feed_spinner);
 		edEmail = (EditText) findViewById(R.id.feed_email);
 		edContent = (EditText) findViewById(R.id.feed_content);
@@ -49,12 +52,8 @@ public class FeedbackActivity extends Activity {
 		adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
 		spinner.setAdapter(adapter);
 
-		btnSubmit.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				feedback();
-			}
-		});
+		btnBack.setOnClickListener(this);
+		btnSubmit.setOnClickListener(this);
 	}
 
 	private void feedback() {
@@ -121,4 +120,13 @@ public class FeedbackActivity extends Activity {
 			}
 		}
 	};
+
+	@Override
+	public void onClick(View v) {
+		if (v == btnBack) {
+			finish();
+		} else if (v == btnSubmit) {
+			feedback();
+		}
+	}
 }
