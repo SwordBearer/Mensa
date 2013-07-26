@@ -11,89 +11,145 @@
             android:text="@string/about" />
     </RelativeLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/shape_round"
-        android:orientation="vertical" >
+        android:layout_height="match_parent" >
 
-        <TextView
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:padding="10dp"
-            android:text="@string/app_version" />
+            android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/about_webtitle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/touch_clear_bg"
-            android:gravity="center_horizontal"
-            android:padding="10dp"
-            android:text="移动客户端由 MENSA 运营" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/shape_round"
+                android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/shape_round"
-        android:orientation="vertical" >
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:padding="6dp"
+                    android:text="@string/about_head" />
 
-        <Button
-            android:id="@+id/about_check_update"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/touch_clear_bg"
-            android:gravity="left"
-            android:padding="10dp"
-            android:text="@string/check_update" />
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:padding="6dp"
+                    android:text="@string/app_version" />
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="@color/gray" />
+                <TextView
+                    android:id="@+id/about_webtitle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/touch_clear_bg"
+                    android:gravity="center_horizontal"
+                    android:padding="6dp"
+                    android:text="@string/webtitle" />
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/about_liencence"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/touch_clear_bg"
-            android:gravity="left"
-            android:padding="10dp"
-            android:text="@string/app_liecence" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/shape_round"
+                android:orientation="vertical" >
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="@color/gray" />
+                <Button
+                    android:id="@+id/about_touzi"
+                    style="@style/Button_About"
+                    android:drawableLeft="@drawable/icon_me_favorates"
+                    android:text="@string/touzi" />
 
-        <Button
-            android:id="@+id/about_feedback"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/touch_clear_bg"
-            android:gravity="left"
-            android:padding="10dp"
-            android:text="@string/feedback" />
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray" />
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="@color/gray" />
+                <Button
+                    android:id="@+id/about_my_question"
+                    style="@style/Button_About"
+                    android:drawableLeft="@drawable/icon_me_feedback"
+                    android:text="@string/my_question" />
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/about_login"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/touch_clear_bg"
-            android:gravity="left"
-            android:padding="10dp"
-            android:text="@string/login"
-            android:textColor="@color/quote_red"
-            android:textStyle="bold" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/shape_round"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/about_check_update"
+                    style="@style/Button_About"
+                    android:drawableLeft="@drawable/icon_me_recommendations"
+                    android:text="@string/check_update" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray" />
+
+                <Button
+                    android:id="@+id/about_liencence"
+                    style="@style/Button_About"
+                    android:drawableLeft="@drawable/icon_me_about"
+                    android:text="@string/app_liecence" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray" />
+
+                <Button
+                    android:id="@+id/about_feedback"
+                    style="@style/Button_About"
+                    android:drawableLeft="@drawable/icon_me_recommendations"
+                    android:text="@string/feedback" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/shape_round"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/about_login"
+                    style="@style/Button_About"
+                    android:drawableLeft="@drawable/icon_me_exit"
+                    android:text="@string/login" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/shape_round"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="@string/shengming" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

@@ -159,7 +159,7 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 		tvDesc.setText(mExpert.getDesc());
 		String phone = mExpert.getPhone();
 		if (phone == null || phone.equals("")) {
-			btnPhone.setVisibility(View.INVISIBLE);
+			btnPhone.setVisibility(View.GONE);
 		} else {
 			btnPhone.setText(phone);
 			btnPhone.setVisibility(View.VISIBLE);

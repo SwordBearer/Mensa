@@ -9,13 +9,14 @@ public class Question extends BaseBean {
 	private int id;
 	private String title;
 	private String date;
-	private String content;
+	private String content = "";
 
 	public Question(JSONObject jo) throws JSONException {
 		this.id = jo.getInt("id");
 		this.title = jo.getString("title");
 		this.date = jo.getString("date");
-		this.content = jo.getString("content");
+		if (jo.has("content"))
+			this.content = jo.getString("content");
 	}
 
 	public int getId() {

@@ -55,7 +55,7 @@
         android:layout_margin="16dp"
         android:clickable="false"
         android:drawableLeft="@drawable/img_phone"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
     <ListView
         android:id="@+id/frag_expert_lv"

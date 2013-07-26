@@ -86,9 +86,12 @@ public class LoginActivity extends Activity {
 				int status = jo.getInt("status");
 				// 如果返回的状态码为1 则登录成功
 				if (status == 1) {
-					if (cbRem.isChecked())
-						MensaAppliaction.saveAccount(LoginActivity.this, new UserAccount(name, passwd));
-					handler.sendEmptyMessage(MSG_LOGIN_OK);
+					if (cbRem.isChecked()) {
+						String sessionId = jo.getString("sessionId");
+						int userId = jo.getInt("userId");
+						MensaAppliaction.saveAccount(LoginActivity.this, new UserAccount(name, passwd, userId, sessionId));
+						handler.sendEmptyMessage(MSG_LOGIN_OK);
+					}
 					startActivity(new Intent(LoginActivity.this, MainActivity.class));
 					finish();
 				} else {

@@ -39,6 +39,7 @@ public class NetHelper {
 	public static final String URL_EXPERT_QA = APP_URL + "/handler/app/expertsdetailsqa.ashx?";
 	public static final String URL_SUBMIT_QUESTION = APP_URL + "/handler/app/question.ashx?";
 	public static final String URL_QUESTION_ARTICLE = APP_URL + "/handler/app/questionarticle.ashx?";
+	public static final String URL_QUESTIONS = APP_URL + "/handler/app/questions.ashx?";
 	public static final String URL_REGISTER = APP_URL + "/handler/app/userregister.ashx?";
 	public static final String URL_LOGIN = APP_URL + "/handler/app/userlogin.ashx?";
 	public static final String URL_FEEDBACK = APP_URL + "/handler/app/feedback.ashx?";
@@ -206,6 +207,22 @@ public class NetHelper {
 		params.put("appid", MensaAppliaction.APP_ID);
 		params.put("id", id);
 		String url = URL_QUESTION_ARTICLE + generateParameters(params);
+		Log.e("TEST", "查询问题 " + url);
+		_get(url, listener);
+	}
+
+	/**
+	 * 获得我的问题
+	 * 
+	 * @param id
+	 * @param listener
+	 */
+	public static void getQuestions(int userId, String sessionId, OnRequestListener listener) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("appid", MensaAppliaction.APP_ID);
+		params.put("userid", userId);
+		params.put("sessionid", sessionId);
+		String url = URL_QUESTIONS + generateParameters(params);
 		Log.e("TEST", "查询问题 " + url);
 		_get(url, listener);
 	}

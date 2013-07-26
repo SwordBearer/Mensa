@@ -131,7 +131,7 @@ public class FragSpecialColumn extends BaseFragment {
 			tvDesc.setText(mExpert.getDesc());
 			String phone = mExpert.getPhone();
 			if (phone == null || phone.equals("")) {
-				btnPhone.setVisibility(View.INVISIBLE);
+				btnPhone.setVisibility(View.GONE);
 				return;
 			}
 			btnPhone.setText(phone);

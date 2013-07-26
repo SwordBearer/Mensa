@@ -3,7 +3,6 @@ package com.mensa.view;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,8 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.mensa.R;
-import com.mensa.application.MensaAppliaction;
-import com.mensa.bean.UserAccount;
 import com.mensa.net.NetHelper;
 import com.mensa.net.OnRequestListener;
 
@@ -93,9 +90,9 @@ public class RegisterActivity extends Activity {
 				JSONObject jo = new JSONObject(object.toString());
 				int status = jo.getInt("status");
 				if (status == 1) {
-					MensaAppliaction.saveAccount(RegisterActivity.this, new UserAccount(name, passwd));
+					// MensaAppliaction.saveAccount(RegisterActivity.this, new UserAccount(name, passwd));
 					handler.sendEmptyMessage(MSG_REGISTER_OK);
-					startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+					startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
 					finish();
 				} else {
 					onError(jo.getString("message"));
@@ -107,7 +104,6 @@ public class RegisterActivity extends Activity {
 		}
 	};
 	private Handler handler = new Handler() {
-		@SuppressLint("ServiceCast")
 		public void handleMessage(Message msg) {
 			if (msg.what == MSG_REGISTER_OK) {
 				btnRegister.setEnabled(true);

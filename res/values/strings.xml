@@ -39,12 +39,16 @@
     <string name="submit_question">提交问题</string>
     <string name="question_article">问题详情</string>
     <!--  -->
-    <string name="app_version">看财经网 定制版 Version 1.3</string>
+    <string name="app_version">Version 1.3</string>
+    <string name="about_head">看财经网 定制版 </string>
     <string name="visit_site">访问 MENSA投资的网站</string>
     <string name="my_question">我的问题</string>
     <string name="check_update">检测新版本</string>
     <string name="app_liecence">软件使用协议</string>
     <string name="feedback">意见反馈</string>
+    <string name="touzi">访问 MENSA投资 的网站</string>
+    <string name="webtitle">移动客户端由 MENSA投资 运营</string>
+    <string name="shengming">免责声明:KANCJ.com看财经网不对本移动客户端内的信息或因依靠此信息所采取的任何行动负责。市场有风险，投资需谨慎</string>
     <string name="login">登录</string>
     <string name="hint_username">用户名</string>
     <string name="hint_password">密码</string>

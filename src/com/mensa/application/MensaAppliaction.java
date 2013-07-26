@@ -24,6 +24,8 @@ public class MensaAppliaction extends Application {
 	private static final String PREF_ACCOUNT = "mensa_user_account";
 	private static final String PREF_KEY_USERNAME = "mensa_user_name";
 	private static final String PREF_KEY_PASSWD = "mensa_user_passwd";
+	private static final String PREF_KEY_USER_ID = "mensa_user_userid";
+	private static final String PREF_KEY_SESSION_ID = "mensa_user_sessionid";
 	private static final String TAG = "MensaAppliaction";
 
 	public static final int APP_ID = 1;
@@ -46,9 +48,11 @@ public class MensaAppliaction extends Application {
 		SharedPreferences prefs = context.getSharedPreferences(PREF_ACCOUNT, Context.MODE_PRIVATE);
 		String name = prefs.getString(PREF_KEY_USERNAME, null);
 		String passwd = prefs.getString(PREF_KEY_PASSWD, null);
+		String sessionid = prefs.getString(PREF_KEY_SESSION_ID, null);
+		int userid = prefs.getInt(PREF_KEY_USER_ID, -1);
 		if (name == null || passwd == null)
 			return null;
-		return new UserAccount(name, passwd);
+		return new UserAccount(name, passwd, userid, sessionid);
 	}
 
 	/**
@@ -62,6 +66,8 @@ public class MensaAppliaction extends Application {
 		Editor editor = prefs.edit();
 		editor.putString(PREF_KEY_USERNAME, userAccount.getUserName());
 		editor.putString(PREF_KEY_PASSWD, userAccount.getPassWd());
+		editor.putString(PREF_KEY_SESSION_ID, userAccount.getSessionId());
+		editor.putInt(PREF_KEY_USER_ID, userAccount.getUserId());
 		editor.commit();
 	}
 
