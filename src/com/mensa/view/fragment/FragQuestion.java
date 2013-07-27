@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.mensa.R;
 import com.mensa.adapter.ExpertAdapter;
@@ -32,6 +33,7 @@ public class FragQuestion extends BaseFragment {
 	private List<Expert> experts = new ArrayList<Expert>();
 	private ExpertAdapter adapter;
 	private ListView lvExperts;
+	private ProgressBar progressBar;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class FragQuestion extends BaseFragment {
 
 	@Override
 	public void initViews(View rootView) {
+		progressBar = (ProgressBar) rootView.findViewById(R.id.progress);
 		lvExperts = (ListView) rootView.findViewById(R.id.frag_question_lv);
 		lvExperts.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -58,6 +61,7 @@ public class FragQuestion extends BaseFragment {
 		if (!NetHelper.isNetworkConnected(mContext)) {
 			return;
 		}
+		progressBar.setVisibility(View.VISIBLE);
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -104,6 +108,7 @@ public class FragQuestion extends BaseFragment {
 			switch (msg.what) {
 			case MSG_EXPERTS_OK:
 				adapter.notifyDataSetChanged();
+				progressBar.setVisibility(View.INVISIBLE);
 				break;
 			case MSG_EXPERTS_ERROR:
 				UIHelper.showToast(mContext, R.string.app_name);

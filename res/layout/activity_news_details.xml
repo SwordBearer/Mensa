@@ -13,6 +13,15 @@
         <TextView
             style="@style/HeadTitle"
             android:text="@string/details_title" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:progressDrawable="@drawable/loading_light_01"
+            android:visibility="invisible" />
     </RelativeLayout>
 
     <WebView

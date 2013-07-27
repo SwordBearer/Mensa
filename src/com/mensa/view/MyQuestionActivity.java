@@ -23,6 +23,7 @@ import com.mensa.R;
 import com.mensa.adapter.QuestionAdapter;
 import com.mensa.application.MensaAppliaction;
 import com.mensa.bean.Question;
+import com.mensa.bean.UserAccount;
 import com.mensa.net.NetHelper;
 import com.mensa.net.OnRequestListener;
 
@@ -55,8 +56,14 @@ public class MyQuestionActivity extends Activity {
 				startActivity(detailsIntent);
 			}
 		});
-		int userId = MensaAppliaction.readAccount(this).getUserId();
-		String sessionId = MensaAppliaction.readAccount(this).getSessionId();
+		UserAccount account = MensaAppliaction.readAccount(this);
+		if (account == null) {
+			UIHelper.showToast(this, R.string.not_login);
+			finish();
+			return;
+		}
+		int userId = account.getUserId();
+		String sessionId = account.getSessionId();
 		if (userId == -1 || sessionId == null) {
 			finish();
 			return;

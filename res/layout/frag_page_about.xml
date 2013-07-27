@@ -34,23 +34,25 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:padding="6dp"
-                    android:text="@string/about_head" />
+                    android:text="@string/about_head"
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:padding="6dp"
-                    android:text="@string/app_version" />
+                    android:text="@string/app_version"
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/about_webtitle"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/touch_clear_bg"
                     android:gravity="center_horizontal"
                     android:padding="6dp"
-                    android:text="@string/webtitle" />
+                    android:text="@string/webtitle"
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <LinearLayout
@@ -114,7 +116,7 @@
                 <Button
                     android:id="@+id/about_feedback"
                     style="@style/Button_About"
-                    android:drawableLeft="@drawable/icon_me_recommendations"
+                    android:drawableLeft="@drawable/icon_me_talks"
                     android:text="@string/feedback" />
             </LinearLayout>
 
@@ -147,7 +149,8 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="@string/shengming" />
+                    android:text="@string/shengming"
+                    android:textColor="@color/black" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

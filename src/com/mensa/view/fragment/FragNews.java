@@ -3,6 +3,7 @@ package com.mensa.view.fragment;
 import org.json.JSONException;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.mensa.R;
 import com.mensa.adapter.NewsAdapter;
@@ -43,6 +45,7 @@ public class FragNews extends BaseFragment {
 	private static final int MSG_NEWS_ERROR = 0x12;
 	private static final String TAG = "NewsPage";
 
+	private ProgressBar progressBar;
 	private LiveListView lvNews;
 	private NewsList newsList;
 	private NewsAdapter listAdapter;
@@ -59,6 +62,7 @@ public class FragNews extends BaseFragment {
 
 	@Override
 	public void initViews(View rootView) {
+		progressBar = (ProgressBar) rootView.findViewById(R.id.progress);
 		final String[] array = getResources().getStringArray(R.array.news_types);
 		lvNews = (LiveListView) rootView.findViewById(R.id.frag_news_lv);
 		btnTypes = (Button) rootView.findViewById(R.id.frag_news_type_btn);
@@ -126,17 +130,27 @@ public class FragNews extends BaseFragment {
 	 * @param context
 	 */
 	private void showInfo() {
-		AppInfo appInfo = MensaAppliaction.getAppInfo();
-		if (appInfo == null)
-			return;
-		String info = MensaAppliaction.getAppInfo().getInfo();
-		if (info == null || info.equals(""))
-			return;
 		builder = new AlertDialog.Builder(mContext);
 		builder.setTitle(R.string.notification);
-		builder.setMessage(info);
-		builder.setPositiveButton(R.string.ok, null);
-		builder.show();
+		AppInfo appInfo = MensaAppliaction.getAppInfo();
+		if (appInfo != null) {
+			String info = MensaAppliaction.getAppInfo().getInfo();
+			if (info == null || info.equals(""))
+				return;
+			builder.setMessage(info);
+			builder.setPositiveButton(R.string.ok, null);
+			builder.show();
+		} else {
+			builder.setMessage(R.string.init_app_error);
+			builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					getActivity().finish();
+					System.exit(0);
+				}
+			});
+			builder.show();
+		}
 	}
 
 	private OnRequestListener loadNewsListener = new OnRequestListener() {
@@ -165,6 +179,7 @@ public class FragNews extends BaseFragment {
 				listAdapter.notifyDataSetChanged();
 				lvNews.onRefreshComplete();
 				lvNews.onMoreComplete();
+				progressBar.setVisibility(View.INVISIBLE);
 				break;
 			case MSG_NEWS_ERROR:
 				UIHelper.showToast(mContext, R.string.get_news_error);
@@ -184,6 +199,7 @@ public class FragNews extends BaseFragment {
 	 * 加载数据列表
 	 */
 	private void loadNewsList() {
+		progressBar.setVisibility(View.VISIBLE);
 		// 如果已经有缓存文件，则不从网络下载
 		NewsList cacheList = (NewsList) CacheUtil.readCache(mContext, newsList.getCacheKey());
 		if (cacheList != null) {

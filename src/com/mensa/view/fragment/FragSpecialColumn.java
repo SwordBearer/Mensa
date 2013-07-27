@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mensa.R;
@@ -49,6 +50,7 @@ public class FragSpecialColumn extends BaseFragment {
 	private TextView tvName, tvPosition, tvDesc;
 	private Button btnPhone;
 	private ListView lvPosts;
+	private ProgressBar progressBar;
 	private PostAdapter postAdapter;
 
 	@Override
@@ -60,6 +62,7 @@ public class FragSpecialColumn extends BaseFragment {
 
 	@Override
 	public void initViews(View rootView) {
+		progressBar = (ProgressBar) rootView.findViewById(R.id.progress);
 		imageView = (AsyncImageView) rootView.findViewById(R.id.frag_expert_image);
 		tvName = (TextView) rootView.findViewById(R.id.frag_expert_name);
 		tvPosition = (TextView) rootView.findViewById(R.id.frag_expert_position);
@@ -98,6 +101,7 @@ public class FragSpecialColumn extends BaseFragment {
 		if (!NetHelper.isNetworkConnected(mContext)) {
 			return;
 		}
+		progressBar.setVisibility(View.VISIBLE);
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -140,9 +144,9 @@ public class FragSpecialColumn extends BaseFragment {
 		}
 		// 更新文章列表
 		if (posts.size() > 0) {
-			// postAdapter.notifyDataSetChanged();
-			postAdapter = new PostAdapter(mContext, posts);
-			lvPosts.setAdapter(postAdapter);
+			postAdapter.notifyDataSetChanged();
+			progressBar.setVisibility(View.INVISIBLE);
+
 			Log.e(TAG, "更新Posts列表 " + postAdapter.getCount() + "---" + posts.size() + lvPosts.getCount());
 		}
 	}

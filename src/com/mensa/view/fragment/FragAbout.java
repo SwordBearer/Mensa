@@ -95,6 +95,8 @@ public class FragAbout extends BaseFragment implements OnClickListener {
 			} else {
 				MensaAppliaction.clearAccount(mContext);
 				btnLogin.setText(R.string.login);
+				startActivity(new Intent(getActivity(), LoginActivity.class));
+				getActivity().finish();
 			}
 		}
 	}

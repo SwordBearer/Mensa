@@ -11,6 +11,7 @@ import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mensa.R;
@@ -24,6 +25,7 @@ public class QuestionArticleActivity extends Activity {
 	//
 	private QuestionArticle questionArticle;
 	private ImageButton btnBack;
+	private ProgressBar progressBar;
 	private TextView tvQcontent, tvQInfo, tvAcontent, tvAInfo;
 
 	@Override
@@ -38,6 +40,7 @@ public class QuestionArticleActivity extends Activity {
 			return;
 		}
 		btnBack = (ImageButton) findViewById(R.id.question_article_back);
+		progressBar = (ProgressBar) findViewById(R.id.progress);
 		tvQcontent = (TextView) findViewById(R.id.question_content);
 		tvQInfo = (TextView) findViewById(R.id.question_info);
 		tvAcontent = (TextView) findViewById(R.id.answer_content);
@@ -55,6 +58,7 @@ public class QuestionArticleActivity extends Activity {
 		if (!NetHelper.isNetworkConnected(QuestionArticleActivity.this)) {
 			return;
 		}
+		progressBar.setVisibility(View.VISIBLE);
 		new Thread(new Runnable() {
 			public void run() {
 				NetHelper.getQuestionArticle(id, loadQuestionListener);
@@ -70,6 +74,7 @@ public class QuestionArticleActivity extends Activity {
 		tvQInfo.setText(questionArticle.getQauthor() + " " + questionArticle.getQdate());
 		tvAcontent.setText(questionArticle.getAcontent());
 		tvAInfo.setText(questionArticle.getAauthor() + " " + questionArticle.getAdate());
+		progressBar.setVisibility(View.INVISIBLE);
 	}
 
 	private OnRequestListener loadQuestionListener = new OnRequestListener() {

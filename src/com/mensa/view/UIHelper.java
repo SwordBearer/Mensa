@@ -44,14 +44,4 @@ public class UIHelper {
 		toast.show();
 	}
 
-	public static PopupWindow createPopupList(Context context, View parent, String[] lists, OnItemClickListener listener) {
-		PopupWindow popup = new PopupWindow(context);
-		ListView lv = new ListView(context);
-		lv.setCacheColorHint(android.R.color.transparent);
-		lv.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, lists));
-		lv.setOnItemClickListener(listener);
-		popup.setContentView(lv);
-		return popup;
-	}
-
 }

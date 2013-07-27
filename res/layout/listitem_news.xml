@@ -9,13 +9,11 @@
         android:id="@+id/news_item_title"
         style="@style/ListItem_Title"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/news_item_info"
-        style="@style/ListItem_Info"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp" />
+        style="@style/ListItem_Info" />
 
 </LinearLayout>

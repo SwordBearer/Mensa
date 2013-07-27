@@ -28,7 +28,7 @@ public class PopupMenu extends PopupWindow {
 	public void setWindow(String[] items, int width, int height, OnItemClickListener listener) {
 		ListView lv = new ListView(context);
 		lv.setCacheColorHint(android.R.color.transparent);
-		lv.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, items));
+		lv.setAdapter(new ArrayAdapter<String>(context, R.layout.listitem_popup, items));
 		lv.setOnItemClickListener(listener);
 		setContentView(lv);
 		setFocusable(true);

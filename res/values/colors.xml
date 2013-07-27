@@ -14,6 +14,7 @@
     <color name="question">#BFD9E9</color>
     <color name="answer">#FF9900</color>
     <!--  -->
+    <color name="orange">#FF7F24</color>
     <color name="ui_touch">#55cccccc</color>
 
 </resources>

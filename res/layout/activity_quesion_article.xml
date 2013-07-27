@@ -18,6 +18,15 @@
             android:layout_centerInParent="true"
             android:text="@string/question_article"
             android:textColor="@color/white" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:progressDrawable="@drawable/loading_light_01"
+            android:visibility="invisible" />
     </RelativeLayout>
 
     <LinearLayout
@@ -25,7 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:background="@drawable/shape_question"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:paddingBottom="10dp" >
 
         <ImageView
             android:layout_width="wrap_content"
@@ -37,17 +47,12 @@
             android:id="@+id/question_content"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp" />
+            android:layout_margin="10dp"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/question_info"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="10dp"
-            android:textSize="12sp" />
+            style="@style/ListItem_Info" />
     </LinearLayout>
 
     <LinearLayout
@@ -56,7 +61,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/shape_answer"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:paddingBottom="10dp" >
 
         <ImageView
             android:layout_width="wrap_content"
@@ -68,17 +74,12 @@
             android:id="@+id/answer_content"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp" />
+            android:layout_margin="10dp"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/answer_info"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="10dp"
-            android:textSize="12sp" />
+            style="@style/ListItem_Info" />
     </LinearLayout>
 
 </LinearLayout>

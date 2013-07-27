@@ -24,6 +24,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mensa.R;
@@ -50,6 +51,7 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 
 	private AsyncImageView imageView;
 	private ImageButton btnBack;
+	private ProgressBar progressBar;
 	private TextView tvName, tvPosition, tvDesc;
 	private Button btnPhone;
 	private ListView lvQuestions;
@@ -59,6 +61,7 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 	private Button btnSubmit;
 
 	private Expert mExpert;
+	private int expertId = -1;
 	private List<Question> questions = new ArrayList<Question>();
 
 	@Override
@@ -66,13 +69,14 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.activity_expert_details);
 		Intent in = getIntent();
-		int expertId = in.getIntExtra("extra_expert_id", -1);
+		expertId = in.getIntExtra("extra_expert_id", -1);
 		if (expertId == -1) {
 			UIHelper.showToast(this, R.string.get_data_error);
 			finish();
 			return;
 		}
 		btnBack = (ImageButton) findViewById(R.id.expert_details_back);
+		progressBar = (ProgressBar) findViewById(R.id.progress);
 		imageView = (AsyncImageView) findViewById(R.id.expert_details_image);
 		tvName = (TextView) findViewById(R.id.expert_details_name);
 		tvPosition = (TextView) findViewById(R.id.expert_details_position);
@@ -83,10 +87,7 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 		edQuestion = (EditText) findViewById(R.id.submit_question_content);
 		cbAllow = (CheckBox) findViewById(R.id.submit_question_allow);
 		btnSubmit = (Button) findViewById(R.id.submit_question_submit);
-
 		btnBack.setOnClickListener(this);
-		qAdapter = new QuestionAdapter(this, questions);
-		lvQuestions.setAdapter(qAdapter);
 		btnPhone.setOnClickListener(this);
 		btnSubmit.setOnClickListener(this);
 		findViewById(R.id.expert_details_screen).setOnClickListener(this);
@@ -99,7 +100,10 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 			}
 		});
 
-		loadData(expertId);
+		qAdapter = new QuestionAdapter(this, questions);
+		lvQuestions.setAdapter(qAdapter);
+		//
+		loadData();
 	}
 
 	/**
@@ -107,15 +111,15 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 	 * 
 	 * @param expertId 专家的ID
 	 */
-	private void loadData(final int expertId) {
-		if (!NetHelper.isNetworkConnected(ExpertDetailsActivity.this)) {
+	private void loadData() {
+		if (!NetHelper.isNetworkConnected(this)) {
 			return;
 		}
+		progressBar.setVisibility(View.VISIBLE);
 		new Thread((new Runnable() {
 			@Override
 			public void run() {
 				NetHelper.getExpert(expertId, loadExpertListener);
-				NetHelper.getExpertQA(expertId, loadQAListener);
 			}
 		})).start();
 	}
@@ -129,7 +133,11 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 			return;
 		if (!NetHelper.isNetworkConnected(this))
 			return;
-		imageView.loadImage(img);
+		try {
+			imageView.loadImage(img);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	/**
@@ -179,17 +187,18 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 				JSONObject jo = new JSONObject(object.toString());
 				mExpert = new Expert(jo);
 				handler.sendEmptyMessage(MSG_GET_EXPERT_OK);
+				NetHelper.getExpertQA(expertId, loadQAListener);
 				loadExpertImage();
 			} catch (JSONException e) {
-				e.printStackTrace();
 				onError(null);
+				e.printStackTrace();
 			}
 		}
 	};
 	private OnRequestListener loadQAListener = new OnRequestListener() {
 		@Override
 		public void onError(String msg) {
-			handler.sendEmptyMessage(MSG_GET_EXPERT_ERROR);
+			handler.sendEmptyMessage(MSG_GET_QA_ERROR);
 		}
 
 		@Override
@@ -246,6 +255,7 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 				break;
 			case MSG_GET_QA_OK:
 				qAdapter.notifyDataSetChanged();
+				progressBar.setVisibility(View.INVISIBLE);
 				break;
 			case MSG_GET_EXPERT_ERROR:
 				UIHelper.showToast(ExpertDetailsActivity.this, R.string.get_specialcolumn_error);

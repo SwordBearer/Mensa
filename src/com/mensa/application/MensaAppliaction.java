@@ -50,7 +50,7 @@ public class MensaAppliaction extends Application {
 		String passwd = prefs.getString(PREF_KEY_PASSWD, null);
 		String sessionid = prefs.getString(PREF_KEY_SESSION_ID, null);
 		int userid = prefs.getInt(PREF_KEY_USER_ID, -1);
-		if (name == null || passwd == null)
+		if (name == null || passwd == null || sessionid == null)
 			return null;
 		return new UserAccount(name, passwd, userid, sessionid);
 	}

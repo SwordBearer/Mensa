@@ -10,7 +10,7 @@
             android:id="@+id/progress"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
             android:progressDrawable="@drawable/loading_light_01"
             android:visibility="invisible" />
 
