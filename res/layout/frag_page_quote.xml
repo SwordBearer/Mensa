@@ -16,13 +16,13 @@
 
         <TextView
             style="@style/HeadTitle"
-            android:text="@string/quote" />
+            android:text="@string/quotetitle" />
 
         <Button
             android:id="@+id/frag_quote_areas_btn"
             style="@style/HeadSpinner"
             android:layout_centerVertical="true"
-            android:textColor="@color/white" />
+            android:textColor="@color/black" />
     </RelativeLayout>
 
     <LinearLayout

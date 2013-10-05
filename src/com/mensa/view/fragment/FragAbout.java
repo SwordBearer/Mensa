@@ -16,6 +16,7 @@ import com.mensa.bean.AppInfo;
 import com.mensa.view.FeedbackActivity;
 import com.mensa.view.LoginActivity;
 import com.mensa.view.MyQuestionActivity;
+import com.mensa.view.UIHelper;
 
 /**
  * 关于页面
@@ -24,7 +25,7 @@ import com.mensa.view.MyQuestionActivity;
  * 
  */
 public class FragAbout extends BaseFragment implements OnClickListener {
-	private Button btnTouzi, btnMyQuestion, btnCheckUpdate, btnLiencence, btnFeedback, btnLogin;
+	private Button btnTouzi, btnMyQuestion, btnCheckUpdate, btnLiencence, btnFeedback, btnClear, btnLogin;
 	private TextView tvWebtitle;
 
 	@Override
@@ -45,6 +46,7 @@ public class FragAbout extends BaseFragment implements OnClickListener {
 		btnLiencence = (Button) rootView.findViewById(R.id.about_liencence);
 		btnFeedback = (Button) rootView.findViewById(R.id.about_feedback);
 		//
+		btnClear = (Button) rootView.findViewById(R.id.about_clearcache);
 		btnLogin = (Button) rootView.findViewById(R.id.about_login);
 
 		btnTouzi.setOnClickListener(this);
@@ -54,13 +56,14 @@ public class FragAbout extends BaseFragment implements OnClickListener {
 		btnLiencence.setOnClickListener(this);
 		btnFeedback.setOnClickListener(this);
 		//
+		btnClear.setOnClickListener(this);
 		btnLogin.setOnClickListener(this);
 
-		if (MensaAppliaction.readAccount(mContext) == null) {
-			btnLogin.setText(R.string.login);
-		} else {
-			btnLogin.setText(R.string.logout);
-		}
+		//if (MensaAppliaction.readAccount(mContext) == null) {
+		//	btnLogin.setText(R.string.login);
+		//} else {
+		btnLogin.setText(R.string.logout);
+		//}
 		AppInfo info = MensaAppliaction.getAppInfo();
 		if (info == null)
 			return;
@@ -89,15 +92,14 @@ public class FragAbout extends BaseFragment implements OnClickListener {
 			startActivity(it);
 		} else if (v == btnFeedback) {
 			startActivity(new Intent(getActivity(), FeedbackActivity.class));
+		} else if (v == btnClear) {
+			if(MensaAppliaction.clearCache(mContext)){
+                UIHelper.showToast(mContext,R.string.cache_cleared);
+            }
 		} else if (v == btnLogin) {
-			if (MensaAppliaction.readAccount(mContext) == null) {
-				startActivity(new Intent(getActivity(), LoginActivity.class));
-			} else {
-				MensaAppliaction.clearAccount(mContext);
-				btnLogin.setText(R.string.login);
-				startActivity(new Intent(getActivity(), LoginActivity.class));
-				getActivity().finish();
-			}
+            MensaAppliaction.clearAccount(mContext);
+			startActivity(new Intent(mContext, LoginActivity.class));
+			getActivity().finish();
 		}
 	}
 }

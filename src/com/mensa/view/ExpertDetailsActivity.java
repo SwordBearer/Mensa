@@ -29,8 +29,10 @@ import android.widget.TextView;
 
 import com.mensa.R;
 import com.mensa.adapter.QuestionAdapter;
+import com.mensa.application.MensaAppliaction;
 import com.mensa.bean.Expert;
 import com.mensa.bean.Question;
+import com.mensa.bean.UserAccount;
 import com.mensa.net.NetHelper;
 import com.mensa.net.OnRequestListener;
 import com.mensa.view.widget.AsyncImageView;
@@ -50,7 +52,7 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 	public static final int MSG_QUESTION_ERROR = 0x46;
 
 	private AsyncImageView imageView;
-	private ImageButton btnBack;
+	private ImageButton btnBack,btnRefresh;
 	private ProgressBar progressBar;
 	private TextView tvName, tvPosition, tvDesc;
 	private Button btnPhone;
@@ -75,7 +77,8 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 			finish();
 			return;
 		}
-		btnBack = (ImageButton) findViewById(R.id.expert_details_back);
+        btnBack = (ImageButton) findViewById(R.id.expert_details_back);
+        btnRefresh = (ImageButton) findViewById(R.id.expert_details_refresh);
 		progressBar = (ProgressBar) findViewById(R.id.progress);
 		imageView = (AsyncImageView) findViewById(R.id.expert_details_image);
 		tvName = (TextView) findViewById(R.id.expert_details_name);
@@ -87,6 +90,7 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 		edQuestion = (EditText) findViewById(R.id.submit_question_content);
 		cbAllow = (CheckBox) findViewById(R.id.submit_question_allow);
 		btnSubmit = (Button) findViewById(R.id.submit_question_submit);
+        btnRefresh.setOnClickListener(this);
 		btnBack.setOnClickListener(this);
 		btnPhone.setOnClickListener(this);
 		btnSubmit.setOnClickListener(this);
@@ -108,14 +112,13 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 
 	/**
 	 * 获取数据
-	 * 
-	 * @param expertId 专家的ID
 	 */
 	private void loadData() {
 		if (!NetHelper.isNetworkConnected(this)) {
 			return;
 		}
 		progressBar.setVisibility(View.VISIBLE);
+        btnRefresh.setVisibility(View.INVISIBLE);
 		new Thread((new Runnable() {
 			@Override
 			public void run() {
@@ -148,12 +151,15 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 		if (content.equals("")) {
 			return;
 		}
+        btnSubmit.setEnabled(false);
 		final boolean allow = cbAllow.isChecked();
 		final int to = mExpert.getId();
-		final String key = "hellyeah";
+		UserAccount account = MensaAppliaction.readAccount(this);
+		final int userId = account.getUserId();
+		//final String key = "hellyeah";如果是短信注册的，才有这个;需要改nethelper里面的参数等
 		new Thread(new Runnable() {
 			public void run() {
-				NetHelper.submitQuestion(content, to, allow, key, submitQuestionListener);
+				NetHelper.submitQuestion(content, to, allow, String.valueOf(userId), submitQuestionListener);
 			}
 		}).start();
 	}
@@ -165,6 +171,8 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 		tvName.setText(mExpert.getName());
 		tvPosition.setText(mExpert.getPosition());
 		tvDesc.setText(mExpert.getDesc());
+        btnRefresh.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
 		String phone = mExpert.getPhone();
 		if (phone == null || phone.equals("")) {
 			btnPhone.setVisibility(View.GONE);
@@ -264,10 +272,12 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 				UIHelper.showToast(ExpertDetailsActivity.this, R.string.get_specialcolumn_error);
 				break;
 			case MSG_QUESTION_OK:
+                btnSubmit.setEnabled(true);
 				UIHelper.showToast(ExpertDetailsActivity.this, R.string.sub_question_ok);
 				edQuestion.setText("");
 				break;
 			case MSG_QUESTION_ERROR:
+                btnSubmit.setEnabled(true);
 				String msgStr = msg.obj.toString();
 				UIHelper.showToast(ExpertDetailsActivity.this, getString(R.string.sub_question_error) + ":" + msgStr);
 				edQuestion.setText("");
@@ -280,7 +290,9 @@ public class ExpertDetailsActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		if (v == btnBack) {
 			finish();
-		} else if (v == btnSubmit) {
+		}else if(v==btnRefresh){
+            loadData();
+        } else if (v == btnSubmit) {
 			submitQuestion();
 		} else if (v == btnPhone) {
 			String phone = mExpert.getPhone();

@@ -1,5 +1,7 @@
 package com.mensa.application;
 
+import java.io.File;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,6 +23,7 @@ import com.mensa.net.OnRequestListener;
 import com.mensa.view.UIHelper;
 
 public class MensaAppliaction extends Application {
+    private static final String PREF_IS_SAVE_ACCOUNT="mensa_is_save_account";
 	private static final String PREF_ACCOUNT = "mensa_user_account";
 	private static final String PREF_KEY_USERNAME = "mensa_user_name";
 	private static final String PREF_KEY_PASSWD = "mensa_user_passwd";
@@ -70,16 +73,52 @@ public class MensaAppliaction extends Application {
 		editor.putInt(PREF_KEY_USER_ID, userAccount.getUserId());
 		editor.commit();
 	}
+    /**
+     * 清保存的账号
+     *
+     * @param context
+     */
+    public static void clearAccount(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_ACCOUNT, Context.MODE_PRIVATE);
+        Editor e = prefs.edit();
+        e.clear().commit();
+    }
+
+    /**
+     *是否保存账号
+     * @param context
+     * @param flag
+     */
+    public static void isSaveAccount(Context context,boolean flag){
+        SharedPreferences prefs = context.getSharedPreferences(PREF_ACCOUNT, Context.MODE_PRIVATE);
+        Editor editor = prefs.edit();
+        editor.putBoolean(PREF_IS_SAVE_ACCOUNT,flag);
+        editor.commit();
+    }
+
+    public static void checkAccount(Context context){
+        SharedPreferences prefs = context.getSharedPreferences(PREF_ACCOUNT, Context.MODE_PRIVATE);
+        if(!prefs.getBoolean(PREF_IS_SAVE_ACCOUNT,false)){
+            clearAccount(context);
+        }
+    }
+
+
 
 	/**
-	 * 清除保存的账号
+	 * 清除缓存
 	 * 
-	 * @param context
+	 * @param mContext
 	 */
-	public static void clearAccount(Context context) {
-		SharedPreferences prefs = context.getSharedPreferences(PREF_ACCOUNT, Context.MODE_PRIVATE);
-		Editor e = prefs.edit();
-		e.clear().commit();
+	public static boolean clearCache(Context mContext) {
+		File file = mContext.getFilesDir();
+		if (file != null && file.exists() && file.isDirectory()) {
+			for (File item : file.listFiles()) {
+				item.delete();
+			}
+			file.delete();
+		}
+        return true;
 	}
 
 	/**
@@ -152,4 +191,5 @@ public class MensaAppliaction extends Application {
 	public static AppInfo getAppInfo() {
 		return mAppInfo;
 	}
+
 }

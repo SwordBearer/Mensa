@@ -33,7 +33,11 @@ public class ExpertAdapter extends BaseListAdapter {
 		}
 		Expert expert = (Expert) mData.get(position);
 		Log.e("ExpertAdapter ", expert.getName());
-		holder.img.loadImage(expert.getImg());
+		try {
+			holder.img.loadImage(expert.getImg());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		holder.tvName.setText(expert.getName());
 		holder.tvPos.setText(expert.getPosition());
 		holder.tvDesc.setText(expert.getDesc());

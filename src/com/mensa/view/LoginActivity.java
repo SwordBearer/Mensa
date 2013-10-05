@@ -1,5 +1,6 @@
 package com.mensa.view;
 
+import android.widget.CompoundButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,6 +46,12 @@ public class LoginActivity extends Activity {
 		edName = (EditText) findViewById(R.id.login_ed_username);
 		edPasswd = (EditText) findViewById(R.id.login_ed_password);
 
+        cbRem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                MensaAppliaction.isSaveAccount(LoginActivity.this,isChecked);
+            }
+        });
 		btnLogin.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				login();
@@ -86,12 +93,10 @@ public class LoginActivity extends Activity {
 				int status = jo.getInt("status");
 				// 如果返回的状态码为1 则登录成功
 				if (status == 1) {
-					if (cbRem.isChecked()) {
-						String sessionId = jo.getString("sessionId");
-						int userId = jo.getInt("userId");
-						MensaAppliaction.saveAccount(LoginActivity.this, new UserAccount(name, passwd, userId, sessionId));
-						handler.sendEmptyMessage(MSG_LOGIN_OK);
-					}
+                    String sessionId = jo.getString("sessionId");
+                    int userId = jo.getInt("userId");
+					handler.sendEmptyMessage(MSG_LOGIN_OK);
+                    MensaAppliaction.saveAccount(LoginActivity.this, new UserAccount(name, passwd, userId, sessionId));
 					startActivity(new Intent(LoginActivity.this, MainActivity.class));
 					finish();
 				} else {

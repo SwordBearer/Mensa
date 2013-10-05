@@ -64,6 +64,7 @@ public class CacheUtil {
 	 */
 	public static Object readCache(Context context, String key) {
 		File data = context.getFileStreamPath(key);
+		Log.e("TEST", "缓存文件名是 " + data.getAbsolutePath());
 		if (!data.exists()) {
 			return null;
 		}

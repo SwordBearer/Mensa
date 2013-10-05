@@ -190,7 +190,7 @@ public class NetHelper {
 		params.put("content", content);
 		params.put("to", to);
 		params.put("allow", allow);
-		params.put("key", key);
+		params.put("userid", key);
 		String url = URL_SUBMIT_QUESTION + generateParameters(params);
 		Log.e("TEST", "提交问题 " + url);
 		_get(url, listener);

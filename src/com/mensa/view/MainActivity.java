@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.widget.TabHost;
 
 import com.mensa.R;
+import com.mensa.application.MensaAppliaction;
 
 /**
  * 程序主界面
@@ -50,6 +51,7 @@ public class MainActivity extends FragmentActivity {
 				firstTime = secondTime;
 				return true;
 			} else {// 否则退出程序
+                MensaAppliaction.checkAccount(this);
 				System.exit(0);
 			}
 		}

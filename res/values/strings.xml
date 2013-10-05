@@ -6,6 +6,7 @@
     <string name="news">新闻</string>
     <string name="details_title">详细内容</string>
     <string name="quote">行情</string>
+    <string name="quotetitle">全球股市行情</string>
     <string name="special_colunm">专栏</string>
     <string name="question">提问</string>
     <string name="about">关于</string>
@@ -25,8 +26,8 @@
     <!-- Quote -->
     <string name="quote_title">名称</string>
     <string name="quote_price">最新</string>
-    <string name="quote_change_amount">跌涨额</string>
-    <string name="quote_change_price">跌涨幅</string>
+    <string name="quote_change_amount">涨跌额</string>
+    <string name="quote_change_price">涨跌幅</string>
 
     <!-- Chinese Market -->
     <string name="chinese_m_1">上证指数</string>
@@ -49,6 +50,7 @@
     <string name="touzi">"  访问 MENSA投资 的网站"</string>
     <string name="webtitle">移动客户端由 MENSA投资 运营</string>
     <string name="shengming">免责声明:KANCJ.com看财经网不对本移动客户端内的信息或因依靠此信息所采取的任何行动负责。市场有风险，投资需谨慎</string>
+    <string name="clear_cache">"  清除缓存"</string>
     <string name="login">"  登录"</string>
     <string name="hint_username">用户名</string>
     <string name="hint_password">密码</string>
@@ -66,6 +68,7 @@
     <string name="logout">"  注销"</string>
     <string name="mianzeshengming"></string>
     <string name="no_update">已是最新版本，无需更新</string>
+    <string name="cache_cleared">缓存已经清空啦</string>
     <!--  -->
     <string name="ok">确定</string>
     <string name="notification">通知</string>

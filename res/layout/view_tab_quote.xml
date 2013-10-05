@@ -4,13 +4,8 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:contentDescription="@null"
+        style="@style/AppTab"
         android:drawableTop="@drawable/selector_tab_quote"
-        android:gravity="center"
-        android:padding="6dp"
-        android:text="@string/news" />
+        android:text="@string/quote" />
 
 </RelativeLayout>

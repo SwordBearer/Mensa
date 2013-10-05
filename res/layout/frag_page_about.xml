@@ -130,6 +130,17 @@
                 android:orientation="vertical" >
 
                 <Button
+                    android:id="@+id/about_clearcache"
+                    style="@style/Button_About"
+                    android:drawableLeft="@drawable/icon_me_draft"
+                    android:text="@string/clear_cache" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray" />
+
+                <Button
                     android:id="@+id/about_login"
                     style="@style/Button_About"
                     android:drawableLeft="@drawable/icon_me_exit"

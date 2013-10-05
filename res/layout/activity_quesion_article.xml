@@ -13,11 +13,8 @@
             style="@style/ButtonBack" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/question_article"
-            android:textColor="@color/white" />
+            style="@style/HeadTitle"
+            android:text="@string/question_article" />
 
         <ProgressBar
             android:id="@+id/progress"

@@ -6,6 +6,8 @@
     <color name="white">#fff</color>
     <color name="black">#000</color>
     <color name="gray">#C0C0C0</color>
+    <color name="headgray">#3C3C3C</color>
+    <color name="newsgray">#666666</color>
     <color name="details_info">#828282</color>
     <color name="quote_green">#228B22</color>
     <color name="quote_red">#EE0000</color>
